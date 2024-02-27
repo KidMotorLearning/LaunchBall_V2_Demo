@@ -1,0 +1,2318 @@
+<!doctype html>
+<html id="html">
+  <link rel="icon" type="image/icon" href="https://kidmotorlearning-lab26.web.app/Favicon.jpg">
+  <head>
+    <title>Cartoon Bowling LaunchBall V2</title>
+
+    <!-- *** CSS *** -->
+    <link rel='stylesheet' type='text/css' href='style.css'>
+
+    <!-- *** BOWSER *** -->
+    <script src="https://unpkg.com/bowser@2.4.0/es5.js"></script>
+    
+    <!-- *** GL-MATRIX *** -->
+    <script src ='https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.8.1/gl-matrix-min.js'></script>
+
+    <!-- *** SIZEOF *** -->
+    <script src="sizeof.js"></script>
+    
+    <!-- *** WJS *** -->
+    <script src="wjs_core_ec.js"></script>
+
+    <!-- *** FIREBASE *** -->
+    <script src='/__/firebase/7.13.2/firebase-app.js'></script>
+    <script src='/__/firebase/7.13.2/firebase-auth.js'></script>
+    <script src='/__/firebase/7.13.2/firebase-database.js'></script>
+    <script src='/__/firebase/init.js'></script>
+
+
+  </head>
+  <body id="body">
+
+    <div id="page-content" class="display-element">
+      
+      <div id="homepage-content">
+        <h1>Welcome to Cartoon Bowling!! </h1>
+        <h4>This game must be played in full screen. <br> Click the "Start New Game" button to enter full screen mode.</h4>
+        <div><button id="homepage-fullscreen-button" class="big-button">Start New Game</button></div>
+        <h5>Did you start the game and have a problem (such as the game crashed)? <br> Click the "Restart Game" button to restart where you left off.</h5>
+        <div><button id="crash-button" class="button" disabled>Restart Game</button></div>
+        <p>~~~~~~~~~~</p>
+        <p>Game Version: LaunchBall V2 |
+            <a id="instructions-link" href="Instructions_CurrentTask.pdf" target="_blank" download="Instructions_CurrentTask.pdf">
+              Click here to download the game instructions
+            </a>
+        </p>
+      </div>
+
+      <div id="chrome-required-content">
+        <p>Uh oh!<br>This experiment requires Google Chrome.<br>
+        Please copy the full URL and reopen it in Chrome.<br>
+        Thank you! We apologize for any inconvenience.</p>
+      </div>
+      
+      <div id="desktop-required-content">
+        <p>Uh oh!<br>This experiment is not supported on mobile devices.<br>
+        Please open it on a computer using Google Chrome.<br>
+        Thank you! We apologize for any inconvenience.</p>
+      </div>
+
+      <div id="survey-content">
+        <h3>Please enter your subject ID and select the appropriate options.</h3>
+        <form id="survey-form">
+          <p class="survey-q" id="subjID">Enter the subject ID exactly as it was provided to you (including capitalization):</p>
+          <input type="text" name="subjID" minlength=5 maxlength=8 required>
+
+          <p class="survey-q" id="age">How old are you?</p>
+          <select name="age" required>
+            <option value="" disabled selected>Select your age</option>
+            <option value="Year3">3 years</option>
+            <option value="Year4">4 years</option>
+            <option value="Year5">5 years</option>
+            <option value="Year6">6 years</option>
+            <option value="Year7">7 years</option>
+            <option value="Year8">8 years</option>
+            <option value="Year9">9 years</option>
+            <option value="Year10">10 years</option>
+            <option value="Year11">11 years</option>
+            <option value="Year12">12 years</option>
+            <option value="Year13">13 years</option>
+            <option value="Year14">14 years</option>
+            <option value="Year15">15 years</option>
+            <option value="Year16">16 years</option>
+            <option value="Year17">17 years</option>
+            <option value="Year18Plus">18+ years</option>
+          </select>
+
+          <p class="survey-q" id="sex">Select your sex (as reported during participant screening):</p>
+          <select name="sex" required>
+            <option value="" disabled selected>Select your sex</option>
+            <option value="F">Female</option>
+            <option value="M">Male</option>
+          </select>
+
+          <p class="survey-q" id="inputdevice">Are you using a mouse, trackpad, or touchscreen?</p>
+          <select name="inputdevice" required>
+            <option value="" disabled selected>Select your device</option>
+            <option value="Mouse">Mouse</option>
+            <option value="Track">Trackpad</option>
+            <option value="Touch">Touchscreen</option>
+          </select>
+
+          <p class="survey-q" id="hand">Which hand to do you use to control the mouse/trackpad or use the touchscreen?</p>
+          <select name="hand" required>
+            <option value="" disabled selected>Select your hand</option>
+            <option value="R">Right</option>
+            <option value="L">Left</option>
+          </select>
+          <div><button class="button" id="survey-button" type="submit" disabled>Continue</button></div>
+        </form>
+      </div>
+
+      <div id="crash-content">
+        <h3>Please enter your subject ID exactly as before.</h3>
+          <input type="text" id = "crashedSubjID" name="subjID" minlength=5 maxlength=21 required>
+          <div><button id="loadCrash-button" class="button">Continue</button></div>
+      </div>
+
+      <div id="crashDataLoaded-content">
+        <h3>Data reload was successful. You can continue the game where you left off.</h3>
+          <div><button id="crashDataLoaded-button" class="button">Continue</button></div>
+      </div>
+
+      <div id="crashDataNotLoaded-content">
+        <h3>Data reload was unsuccessful for the Subject ID entered. Please return to the home screen to start a new game.</h3>
+          <div><button id="crashDataNotLoaded-button" class="button">Return to home screen</button></div>
+      </div>
+
+      <div id="fullscreen-content">
+        <h3>This game must be run in full-screen.</h3>
+        <div><button id="fullscreen-button" class="big-button">Continue Game</button></div>
+        <br><br><br><br><br><br>
+        <p><button id="quit-button" class="button">Quit Game</button></p>
+      </div>
+      
+      <div id="pointerlock-content">
+        <h3>Click the "START" button to start the game! </h3> 
+        <h4>If using a mouse or trackpad, your pointer will be hidden. </h4>
+        <div><button id="pointerlock-button" class="big-button">START</button></div>
+      </div>
+
+      <div id="block1_instructions-content">
+        <div class="block1_instructions-header">
+          <h3> Cartoon Bowling Game!</h3>
+          <h4> Instructions: Block 1</h4>
+          <p class="block1_instructions-body">
+            Launch the ball towards the play button. If you hit the play button you will get to watch the movie clip. The ball might do funny things at times. There are 40 trials. <br>
+            If using a mouse to control the ball, click and hold your left mouse button. Then, drag the mouse in the direction you want the ball to move. Release the mouse button and the ball will go in that direction. <br>
+            If using a trackpad, click the trackpad but keep your finger on it. Drag your finger in the direction you want the ball to move. Lift up your finger to release the ball.<br>
+            If using a touchscreen, click the ball and drag your finger towards where you want the ball to move. Lift up your finger to release the ball. <br>
+          </p>
+        </div>
+        <p style="margin-bottom: 0;">Click the "ENTER" button to continue.</p>
+        <button class="button" id="block1_instructions-button" disabled>ENTER</button>
+      </div>
+
+      <div id="block2_instructions-content">
+        <div class="block2_instructions-header">
+          <h3> Cartoon Bowling Game!</h3>
+          <h4> Instructions: Block 2</h4>
+          <p class="block2_instructions-body">
+            Keep trying to hit the button by launching the ball. Try to get the movie clip to play as often as you can. 
+            There are 140 trials total but there is a break after 110 trials. <br>
+          </p>
+        </div>
+        <p style="margin-bottom: 0;">Click the "ENTER" button to continue.</p>
+        <button class="button" id="block2_instructions-button" disabled>ENTER</button>
+      </div>
+
+      <div id="trial-content" class="noselect">
+        <canvas id="2d-canvas" style="z-index: 2"></canvas>
+        <canvas id="3d-canvas"></canvas>
+      </div>
+
+      <div id="end-content">
+        <h3>You have finished the game. Thank you for playing! </h3> 
+        <h4>You may now close the browser. </h4>
+      </div>
+
+      <div id="endEarly-content">
+        <h3>Thank you for playing! </h3> 
+        <h4>You may now close the browser. </h4>
+      </div>
+
+      <div id="connection-content" class="display-element">
+        <h3>Attempting to connect to data server. Please wait...</h3>
+        <p>The game will resume automatically when you have reconnected.</p>
+        <p>If nothing is happening, please check your internet connection.</p>
+      </div>
+
+      <div id="screenOrientation-content">
+         <h1>Welcome to Cartoon Bowling!! </h1>
+         <h3>For best performance, this game must be played with your device oriented in landscape. Please rotate your device.</h3>
+      </div>
+
+      <div id="screenOrientationChange-content">
+         <h1>You have rotated your device! </h1>
+         <h3>Please rotate your device back to landscape to continue the game.</h3>
+      </div>
+
+      <div id="phoneDetected-content">
+         <h1>Welcome to Cartoon Bowling!! </h1>
+         <h3>For best performance, this game must be played on a different device. Please try again using a computer or tablet.</h3>
+        <p>Please contact the experimenter if you have any questions. Thank you!</p>
+      </div>
+    </div>
+
+    <script>
+      'use strict';
+
+      
+      //Define game setup variables 
+      var subjID;
+      var inputdevice;
+      var startDate;
+      var startTouch = [0,0];
+      var preGameStart = true; 
+      var XoutOfBounds = false;
+      var YoutOfBounds = false;
+      var subjCrashedData = null;
+      var crashDataLoaded = false;
+      var gameAttemptNum = 0;
+      var correctOrientation = true;
+      var previousScreen = 'fullscreen-content'
+      var mousePressed = false
+      var leftHome = false
+
+      //Audio Files
+      var block1AudioInstructions = new Audio('Block1Instructions_LaunchBall_WAV.wav');
+      var block2AudioInstructions = new Audio('Block2Instructions_LaunchBall_WAV.wav');
+      var gameStartSound = new Audio('DM-CGS-45.wav');
+      var buttonClickSound = new Audio('Button_17_Pack2.wav');
+
+      //Set experiment name
+      //IMPORTANT: expName must match the experiment name in your project directory
+      var expName = 'LaunchBall_Task_JavaScript_V2_github';
+ 	  
+      //Set Game Version
+      var gameVersion = 'Launchball_V2 GitHub'
+      
+      //IMPORTANT: Set to false before deploying
+      var logFlag = false; //print messages to debug console?
+      bypassForms(false); //allow user to skip subID and survey forms?
+
+      //IMPORTANT: Set to true before deploying (if false, does not upload data to firebase. Helpful for testing/debuging locally)
+      var useFirebase = false; //for test mode, set to false, to deploy, set to true
+
+      //Game Setup Parameters
+      var requireFullscreen = true; //requires entering fullscreen before continuing game
+      var requireChrome = false;   //No browser limitations
+      var requireDesktop = false; //Allows use on mobile devices
+      var mobilePlatform = false; //Check whether running on mobile or desktop
+      var minMouseLength = 300; //Sets the minimum amount of movement allowed for mouse users
+      var minTouchLength = 250; //Sets the minimum amount of movement allowed for touchpad users
+      var minTabletLength = 300; //Sets the minimum amount of movement allowed for tablet users
+      var recordSwitch = 'hold'
+     // var recordSwitch = 'click' //click has bugs when using a touchscreen that need to be sorted LAM
+
+      //Initialize the 2d canvas
+      var canvas = document.getElementById("2d-canvas");
+      var canvasContext = canvas.getContext("2d");
+
+      //Initialize the 3d canvas
+      var glCanvas = document.getElementById("3d-canvas");
+      var gl = glCanvas.getContext("webgl2");
+      initWebGL(gl);
+
+      //Intialize shaders
+      const shaderProgram = initShaderProgram(gl, vsSource, fsSource);
+      const shadowShaderProgram = initShaderProgram(gl,shadowVsSource,shadowFsSource);
+      
+      //Initialize camera
+      const camera = {};
+      //gl, shader, position, focalPoint, near, far, fov
+      initCamera(gl, shaderProgram, [0, -26, 13], [0, 20, 0], 20, 80, 45); //was [0,-25,18]
+
+      //Initialize lighting (x, y, z, w)
+      //w = 1 for point light, 0 for directional light
+      //Remember to change '#define NR_LIGHTS' in the fragment shader if you add lights here
+      const lightPositions = [[10, -25, 25, 0]];
+      //If shadows, you must initCamera() first
+      //For no shadows, simply omit the shadows argument of initLighting
+      const shadows = { lightIndex:0, textureUnit: 2, textureSize: 4096 };
+      const light = initLighting(gl, shaderProgram, lightPositions, shadows);
+      
+      //Initialize textures
+      //Be careful not to use the shadowMapTextureUnit assigned above!
+      gl.activeTexture(gl.TEXTURE0); //default white (multiplies with material.diffuseColor)
+      const defaultTexture = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, defaultTexture);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([255,255,255,255]));
+      
+      gl.activeTexture(gl.TEXTURE1);  //video texture
+      const videoTexture = gl.createTexture();
+      gl.bindTexture(gl.TEXTURE_2D, videoTexture);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([255,0,255,255]));
+
+      initTextureImage('ButtonsStyle13_03_edit.png',3); //a play button image
+      initTextureImage('CartoonClouds_2048x2048.png',4); //clouds image
+      initTextureImage('MissedImage.png',5) //sad face emoji
+      initTextureImage('Arrow.png',6) //arrow image
+
+      //be careful not to use shadows.textureUnit for anything else (check above)
+
+      //Initialize game objects
+      const home = genDiskMesh();
+      home.VAO = initVAO(gl,home,shaderProgram);
+      home.positions = [[0,0,0.01]];
+      home.orientations = [[0,0]];
+      home.scaleXYZ = [[3,3,1]];
+      home.inactiveColor = [0.3, 0.3, 0.3];
+      home.activeColor = [0.5, 0.1, 0.1];
+      home.diffuseColors = [home.inactiveColor];
+      home.radius = home.scaleXYZ[0][0];
+      home.position = [0, 0];
+      
+      const cursor = genIcosphereMesh();
+      cursor.VAO = initVAO(gl,cursor,shaderProgram);
+      cursor.positions = [[0,0,1.75]];//was 0,0,1
+      cursor.orientations = [[0,0]];
+      cursor.scaleXYZ = [[3.5,3.5,3.5]]; //was 2,2,2
+      cursor.activeColor = [0,0.7,0.0];
+      cursor.inactiveColor = [0.7,0,0];
+      cursor.diffuseColors = [cursor.inactiveColor];
+      //extra properties for game logic
+      cursor.radius = cursor.scaleXYZ[0][0]/2;
+      cursor.position = [0,0];
+      cursor.display = [0,0];
+      cursor.xmin = -24;
+      cursor.xmax = 24;
+      cursor.ymin = -1;
+      cursor.ymax = 25;
+
+      //This is the moving target from Evan
+      const target = genCubeMesh();
+      target.VAO = initVAO(gl,target,shaderProgram);
+      target.orientations = [[0,0]];
+      target.scaleXYZ = [[2,2,2]];
+      target.positions = [[0,0,target.scaleXYZ[0][2]/2]];
+      target.diffuseColors = [[0,1,1]];
+      //extra properties for game logic
+      target.radius = target.scaleXYZ[0][0];
+
+      const floor = genQuadMesh();
+      floor.VAO = initVAO(gl,floor,shaderProgram);
+      floor.positions = [[0,13.5,0]];
+      floor.orientations = [[-Math.PI/2,0]];
+      floor.scaleXYZ = [[50,0,30]];
+      floor.diffuseColors = [[210/255,180/255,140/255]]; //[[0,0.5,0]];
+
+      const screenBackground = genQuadMesh(); //Using this screen to display videos
+      screenBackground.VAO = initVAO(gl,screenBackground,shaderProgram);
+      screenBackground.orientations = [[0,0]];
+      screenBackground.scaleXYZ = [[51,1,18]];
+      screenBackground.positions = [[0,floor.positions[0][1]+floor.scaleXYZ[0][2]/2 + 1,screenBackground.scaleXYZ[0][2]/2 - 2]];
+      screenBackground.diffuseColors = [[1,1,1]];
+      screenBackground.specularColors = [[1,1,1]];
+      screenBackground.diffuseMaps = [1]; //video texture
+      //extras
+      var videoURLs = videos();
+      const video = setupVideo('',screenBackground);
+
+      const gameBackdrop = genQuadMesh();
+      gameBackdrop.VAO = initVAO(gl,gameBackdrop,shaderProgram);
+      gameBackdrop.orientations = [[0,0]];
+      gameBackdrop.scaleXYZ = [[canvas.width/2,1,canvas.height/2]];
+      gameBackdrop.positions = [[0,floor.positions[0][1]+floor.scaleXYZ[0][2]/2 + 3,0]];
+      gameBackdrop.diffuseColors = [[1,1,1]]; //[[173/255,216/255,230/255]];
+      gameBackdrop.diffuseMaps = [4]; //Clouds background
+
+      const gameEnvironmentBottom = genQuadMesh();
+      gameEnvironmentBottom.VAO = initVAO(gl,gameEnvironmentBottom,shaderProgram);
+      gameEnvironmentBottom.orientations = [[-Math.PI/2,0]];
+      gameEnvironmentBottom.scaleXYZ = [[100,0,100]];
+      gameEnvironmentBottom.positions = [[0,13.5,-1]];
+      gameEnvironmentBottom.diffuseColors = [[0,0.5,0]];
+
+      const sadFace = genQuadMesh();
+      sadFace.VAO = initVAO(gl,sadFace,shaderProgram);
+      sadFace.orientations = [[0,0]];
+      sadFace.scaleXYZ = [[5,1,5]];
+      sadFace.positions = [[0,screenBackground.positions[0][1]+4,10]];
+      sadFace.diffuseColors = [[1,1,1]];
+      sadFace.diffuseMaps = [5]; //SadFace
+
+      //Initialize finite state machine
+      const stateNames = ['PAUSE', 'START', 'GO', 'RECORD', 'MOVING', 'RETURN', 'FINISH', 'ADVANCE', 'FULLSCREEN', 'CONNECTION'];
+      var state = new State(stateNames, handleStateChange);
+
+      //Initialize anything else that is used before initTrial() is called
+      var points = {earned: 0, text: currencyFormatter.format(0)};
+      var feedbackText = '';
+      var instructionText = '';
+      
+      //Construct Trial Sequence
+      var numDemoTrials = 10; //set demo trial length
+      var numTrials = [5,10,5,5]; //Small set of trials for testing 
+      //var numTrials = [40,90,20,30]; //Set number of trials for each block
+
+      //Construct Button Sequence
+      var buttonIDs = [0,1,2,3,4,5,6];
+      var buttonPositions = linspace(-18,18,buttonIDs.length); //7 buttons 
+      var distanceToButtons = 24; //distance from home position to button panel
+      var block1Repetitions = 5; //define how many times each button repeats in block 1
+      var buttonSequence = [];
+      var block1ButtonSequence = [];
+      var block2ButtonSequence = [];
+      var block3ButtonSequence = [];
+      var block4ButtonSequence = [];
+      var block2lengths = [90]; //this is equal to the length of block 2 for adaptation task
+      var block2CorrectButtons = [3];
+
+	    block1ButtonSequence = new Array(numTrials[0]).fill(3);
+      block1ButtonSequence = block1ButtonSequence.flat();
+      buttonSequence.push(block1ButtonSequence);
+      
+      block2ButtonSequence = new Array(numTrials[1]).fill(3);
+      block2ButtonSequence = block2ButtonSequence.flat();
+      buttonSequence.push(block2ButtonSequence);
+
+      block3ButtonSequence = new Array(numTrials[2]).fill(3);
+      block3ButtonSequence = block3ButtonSequence.flat();
+      buttonSequence.push(block3ButtonSequence);
+      
+      block4ButtonSequence = new Array(numTrials[3]).fill(3);
+      block4ButtonSequence = block4ButtonSequence.flat();
+      buttonSequence.push(block4ButtonSequence);
+      
+      //Set video playback sequence
+      var videoOrder = shuffle(Array.from({length: videoURLs.length}, (v, i) => i));
+
+      //Construct Perturbation Sequence
+      var perturbationThreshold = 10;
+      var perturbationAngle = -30;
+      var block1perturbationSequence = new Array(block1ButtonSequence.length).fill(0);
+      var block2perturbationSequence = new Array(block2ButtonSequence.length).fill(perturbationAngle); //full perturbation value
+      for (let i = 0; i < (numTrials[1] - 30); i++) {  
+        block2perturbationSequence[i] = perturbationAngle/(numTrials[1] - 30)*(i+1); 
+      }
+      var block3perturbationSequence = new Array(block3ButtonSequence.length).fill(NaN);
+      for (let i = 0; i < block3perturbationSequence.length; i++) {  
+        block3perturbationSequence[i] = Math.floor(Math.random() * (2 - -2 + 1)) + -2; 
+      }
+      var block4perturbationSequence = new Array(block4ButtonSequence.length).fill(0);
+      var perturbationSequence = [];
+      
+      perturbationSequence.push(block1perturbationSequence,block2perturbationSequence,block3perturbationSequence,block4perturbationSequence);
+
+      var trialNumber = 0;
+      var displayTrialNumber = 1; //for display text on the canvas
+      var blockNumber = 0;
+      var blockTransition = false;
+      var resetToStartState = false;
+      var trial; //this will be the trial data object
+      var trajMatrix; //this will be the trajectory data matrix object
+      var ballTrajMatrix; //this will store the position of the ball
+
+      var conttrial = 0; //for data saving one line per trial [DataMatrix]
+      var conttraj_all = 0; //for keeping track of all of the frames across the while experiment
+      var conttraj = 0; //for data saving one trajectory line per frame [Trajectories]
+      var contTrajTrial = 0; //for data saving all trajectories for one trial in one array; resets for each trial [Trajectories]
+      var ballconttraj = 0; //for data saving one ball trajectory line per frame [ballTrajectories]
+      var ballcontTrajTrial = 0; //for data saving all ball trajectories for one trial in one array; resets for each trial [ballTrajectories]
+      var numReleased = 0; //to track if the ball is released during the trial. This is set to -1 in order to match old version where first attempt of movement is 0 not 1.
+      var endInterpolated = false;
+      var trialEnded = false;
+      var screenRefreshRate; //to collect the refresh rate of the screen at the end of the trial
+      var initialAngleCalcPoint = distanceToButtons * 0.05; //calculate initial angle when the ball has reached 5% of the distance to the buttons
+
+      //Johns's variables
+      var mousePrevXY = [0,0];
+      var mouseXY = [0,0];
+      var clickedOnBall = false;
+      var mouseClicked = false;
+      var mouseClicked2 = false;
+
+
+      //timestamp variables
+      var timeStamps = {
+        startTrialTimestamp: [],
+        ballClickedTimestamp: [],
+        endTrialTimestamp: [],
+        trialNumber: 'timestamps',
+      }
+
+      //crashfile variables
+      var crashFile = {
+        subjID_crash: subjID,
+        uid_crash: uid,
+        device_crash: inputdevice,
+        blockNumber_crash: 0,
+        trialNumber_crash: 0,
+        displayTrialNumber_crash: 0,
+        startDate_crash: 0,
+        conttrial_crash: 0,
+        conttraj_all_crash: 0,
+        conttraj_crash: 0,
+        ballconttraj_crash: 0,
+        block2lengths_crash: [],
+        buttonSequence_crash: [],
+        videoOrder_crash: [],
+        timeStamps_crash: timeStamps,
+        gameAttemptNum_crash: gameAttemptNum,
+      }
+
+      //Construct All Static Buttons
+      var buttonData; //this will be the buttonData object
+      var allButtons; //this will be called in game logic to access correct buttons
+
+      const button0 = genCubeMesh();
+      button0.VAO = initVAO(gl,button0,shaderProgram);
+      button0.orientations = [[0,0]];
+      button0.scaleXYZ = [[2.5,.3,2.5]];
+      button0.diffuseColors = [[0,1,0]];
+      button0.specularColors = [[1,1,1]];
+      button0.diffuseMaps = [3];
+      button0.specularMaps = [0];
+      //extra properties for game logic
+      button0.distance = distanceToButtons;
+      button0.position = [buttonPositions[0],button0.distance];
+      button0.positions[0] = [button0.position, button0.scaleXYZ[0][2]/2].flat();
+      button0.boundaries = [button0.position[0] - button0.scaleXYZ[0][0]/2, button0.position[0] + button0.scaleXYZ[0][0]/2];
+      button0.buttonNumber = 0;
+
+      const button1 = genCubeMesh();
+      button1.VAO = initVAO(gl,button1,shaderProgram);
+      button1.orientations = [[0,0]];
+      button1.scaleXYZ = [[2.5,.3,2.5]];
+      button1.diffuseColors = [[0,1,0]];
+      button1.specularColors = [[1,1,1]];
+      button1.diffuseMaps = [3];
+      button1.specularMaps = [0];
+      button1.distance = distanceToButtons;
+      button1.position = [buttonPositions[1],button1.distance];
+      button1.positions[0] = [button1.position, button1.scaleXYZ[0][2]/2].flat();
+      button1.boundaries = [button1.position[0] - button1.scaleXYZ[0][0]/2, button1.position[0] + button1.scaleXYZ[0][0]/2];
+      button1.buttonNumber = 1;
+
+      const button2 = genCubeMesh();
+      button2.VAO = initVAO(gl,button2,shaderProgram);
+      button2.orientations = [[0,0]];
+      button2.scaleXYZ = [[2.5,.3,2.5]];
+      button2.diffuseColors = [[0,1,0]];
+      button2.specularColors = [[1,1,1]];
+      button2.diffuseMaps = [3];
+      button2.specularMaps = [0];
+      button2.distance = distanceToButtons;
+      button2.position = [buttonPositions[2],button2.distance];
+      button2.positions[0] = [button2.position, button2.scaleXYZ[0][2]/2].flat();
+      button2.boundaries = [button2.position[0] - button2.scaleXYZ[0][0]/2, button2.position[0] + button2.scaleXYZ[0][0]/2];
+      button2.buttonNumber = 2;
+
+      //button 3 is the button straight ahead
+      const button3 = genCubeMesh();
+      button3.VAO = initVAO(gl,button3,shaderProgram);
+      button3.orientations = [[0,0]];
+      button3.scaleXYZ = [[5,.3,5]]; //x width, z height //was 2.5 by 2.5
+      button3.diffuseColors = [[0,1,0]];
+      button3.specularColors = [[1,1,1]];
+      button3.diffuseMaps = [3];
+      button3.specularMaps = [0];
+      button3.distance = distanceToButtons;
+      button3.position = [buttonPositions[3],button3.distance];
+      button3.positions[0] = [button3.position, button3.scaleXYZ[0][2]/2].flat();
+      button3.boundaries = [button3.position[0] - button3.scaleXYZ[0][0]/2, button3.position[0] + button3.scaleXYZ[0][0]/2];
+      button3.buttonNumber = 3;
+
+      const button4 = genCubeMesh();
+      button4.VAO = initVAO(gl,button4,shaderProgram);
+      button4.orientations = [[0,0]];
+      button4.scaleXYZ = [[2.5,.3,2.5]];
+      button4.diffuseColors = [[0,1,0]];
+      button4.specularColors = [[1,1,1]];
+      button4.diffuseMaps = [3];
+      button4.specularMaps = [0];
+      button4.distance = distanceToButtons;
+      button4.position = [buttonPositions[4],button4.distance];
+      button4.positions[0] = [button4.position, button4.scaleXYZ[0][2]/2].flat();
+      button4.boundaries = [button4.position[0] - button4.scaleXYZ[0][0]/2, button4.position[0] + button4.scaleXYZ[0][0]/2];
+      button4.buttonNumber = 4;
+
+      const button5 = genCubeMesh();
+      button5.VAO = initVAO(gl,button5,shaderProgram);
+      button5.orientations = [[0,0]];
+      button5.scaleXYZ = [[2.5,.3,2.5]];
+      button5.diffuseColors = [[0,1,0]];
+      button5.specularColors = [[1,1,1]];
+      button5.diffuseMaps = [3];
+      button5.specularMaps = [0];
+      button5.distance = distanceToButtons;
+      button5.position = [buttonPositions[5],button5.distance];
+      button5.positions[0] = [button5.position, button5.scaleXYZ[0][2]/2].flat();
+      button5.boundaries = [button5.position[0] - button5.scaleXYZ[0][0]/2, button5.position[0] + button5.scaleXYZ[0][0]/2];
+      button5.buttonNumber = 5;
+
+      const button6 = genCubeMesh();
+      button6.VAO = initVAO(gl,button6,shaderProgram);
+      button6.orientations = [[0,0]];
+      button6.scaleXYZ = [[2.5,.3,2.5]];
+      button6.diffuseColors = [[0,1,0]];
+      button6.specularColors = [[1,1,1]];
+      button6.diffuseMaps = [3];
+      button6.specularMaps = [0];
+      button6.distance = distanceToButtons;
+      button6.position = [buttonPositions[6],button6.distance];
+      button6.positions[0] = [button6.position, button6.scaleXYZ[0][2]/2].flat();
+      button6.boundaries = [button6.position[0] - button6.scaleXYZ[0][0]/2, button6.position[0] + button6.scaleXYZ[0][0]/2];
+      button6.boundaries = [button6.position[0] - button6.scaleXYZ[0][0]/2, button6.position[0] + button6.scaleXYZ[0][0]/2];
+      button6.buttonNumber = 6;
+
+      allButtons = [button0,button1,button2,button3,button4,button5,button6];
+
+      buttonData = {
+      //Button numbers and XY positions  
+        trialNumber: 'buttonInfo',
+        button0: [ button0.buttonNumber, button0.position[0], button0.position[1], button0.scaleXYZ[0][0], button0.scaleXYZ[0][1], button0.scaleXYZ[0][2], button0.orientations[0][0], button0.orientations[0][1], button0.boundaries[0], button0.boundaries[1]],
+        button1: [ button1.buttonNumber, button1.position[0], button1.position[1], button1.scaleXYZ[0][0], button1.scaleXYZ[0][1], button1.scaleXYZ[0][2], button1.orientations[0][0], button1.orientations[0][1], button1.boundaries[0], button1.boundaries[1]],
+        button2: [ button2.buttonNumber, button2.position[0], button2.position[1], button2.scaleXYZ[0][0], button2.scaleXYZ[0][1], button2.scaleXYZ[0][2], button2.orientations[0][0], button2.orientations[0][1], button2.boundaries[0], button2.boundaries[1]],
+        button3: [ button3.buttonNumber, button3.position[0], button3.position[1], button3.scaleXYZ[0][0], button3.scaleXYZ[0][1], button3.scaleXYZ[0][2], button3.orientations[0][0], button3.orientations[0][1], button3.boundaries[0], button3.boundaries[1]],
+        button4: [ button4.buttonNumber, button4.position[0], button4.position[1], button4.scaleXYZ[0][0], button4.scaleXYZ[0][1], button4.scaleXYZ[0][2], button4.orientations[0][0], button4.orientations[0][1], button4.boundaries[0], button4.boundaries[1]],
+        button5: [ button5.buttonNumber, button5.position[0], button5.position[1], button5.scaleXYZ[0][0], button5.scaleXYZ[0][1], button5.scaleXYZ[0][2], button5.orientations[0][0], button5.orientations[0][1], button5.boundaries[0], button5.boundaries[1]],
+        button6: [ button6.buttonNumber, button6.position[0], button6.position[1], button6.scaleXYZ[0][0], button6.scaleXYZ[0][1], button6.scaleXYZ[0][2], button6.orientations[0][0], button6.orientations[0][1], button6.boundaries[0], button6.boundaries[1]],
+        buttonSequence: buttonSequence,
+        block2lengths: block2lengths,
+        videoOrder: videoOrder,
+      };
+
+      addEventListeners();
+      mainLoopFunc(); //requires calcFunc(), stateFunc(), and displayFunc() to be defined
+
+      //This function initiates a trial
+      function initTrial(trialNumber,blockNumber) {
+        trial = {
+          targetDistance: distanceToButtons,
+          trialNumber: trialNumber,
+          blockNumber: blockNumber,
+          conttrial: conttrial,
+          buttonHit: 77,
+          startTrialTime: performance.now(),
+          demoTrial: false,
+          screenRefreshRate: screenRefreshRate,
+          endTrialTime: 0,
+          //reset data arrays
+          dxCo: [],
+          dyCo: [],
+          tCo: [], 
+          stateCo: [],
+          conttrajArray: [],
+          stateChange: [],
+          stateChangeTime: [],
+          videoLoadTimes: [], //Array to track how long it takes to load the first frame of the video file
+          screenRefreshTime: [], //Array to track the time of each screen refresh
+        };
+        //Array variables
+        trajMatrix = {
+          conttraj_all: conttraj_all,
+          conttrial: conttrial,
+          conttraj: 0,
+          contTrajTrial: 0,
+          trialNumber: 'trajMatrix',  
+          //reset data arrays
+          data: [], //single frame of data - will be t, blockNumber, trialNumber, touch/mouse input data, ball positions, ball angles, state
+        };
+
+        ballTrajMatrix = {
+          conttraj_all: conttraj_all,
+          conttrial: conttrial,
+          ballconttraj: 0,
+          ballcontTrajTrial: 0,
+          trialNumber: 'ballTrajMatrix',  
+          //reset data arrays
+          data: [], //single frame of data - will be t, blockNumber, trialNumber, touch/mouse input data, ball positions, ball angles, state
+        };
+        
+        timeStamps.startTrialTimestamp[conttrial] = getFormattedDateObject().string;
+
+        //Dynamic params dependent on params set in the object constructor (could assign these in the object constructor but this is often easier)
+        trial.buttonID = buttonSequence[blockNumber][trialNumber];
+        trial.perturbation = perturbationSequence[blockNumber][trialNumber];
+        
+        //Apply any condition-specific parameters/settings (could do this outside of initTrial if they are not trial-specific)
+        if (trial.condition===0){ }
+        
+        //reset parameters of game objects
+        cursor.delta = [0, 0];
+        cursor.perturb = trial.perturbation;
+        cursor.hit = false;
+        cursor.disableMovement = true;
+        cursor.changeColor = false;
+        cursor.position = [...home.position];
+        cursor.recMoveAngle = 0;
+        cursor.actualMoveAngle = 0; //90 degrees is straight ahead. Prior version had 0 defined as straight ahead. To compare to regular adaptation task subtract 90 degrees from this angle value!
+        cursor.cumRecDelta = [0,0];
+
+        endInterpolated = false;
+        trialEnded = false;
+        numReleased = 0; 
+        XoutOfBounds = false;
+        YoutOfBounds = false;
+        mousePrevXY = [0,0];
+        clickedOnBall = false;
+        mouseClicked = false;
+        mouseClicked2 = false;
+        leftHome = false;
+
+        setDisplayedCursorPosition();
+
+        target.buttonNumber = allButtons[trial.buttonID].buttonNumber;
+        target.perturbation = trial.perturbation;
+        target.distance = allButtons[trial.buttonID].distance;
+        target.position = allButtons[trial.buttonID].position;
+        target.boundaries = allButtons[trial.buttonID].boundaries;
+        target.positions[0] = [allButtons[trial.buttonID].position, allButtons[trial.buttonID].scaleXYZ[0][2]/2].flat();
+        target.diffuseColors = [[0,1,1]];
+
+        video.ready = false;
+        video.src = videoURLs[videoOrder[conttrial]];
+        video.load();
+        trial.videoLoadTimes[0] = performance.now(); //time in main loop after video load is called 
+        
+        //reset flags and timers
+        trialEnded = false;
+        saveSuccessful = false;
+        saveSuccessful_trial = false;
+        saveSuccessful_timeStamps = false;
+        saveSuccessful_crash = false;
+        saveSuccessful_button = false;
+        trialTimer.reset();
+        dtTimer.reset();
+        
+       //change speed scalar for in person tablet
+        if(inputdevice =="Tablet"){
+            cursor.speedScalar = .6; 
+        } else{
+            cursor.speedScalar = .6; //originally 0.05
+        }
+      
+        //For the case of transitioning between blocks, trial logic started after pointer is re-locked
+        if(!blockTransition){
+            //Resets the ball and sets the state to START
+            //resetBall()
+            state.next(state.START); //this is in Nayo's version. Issue with iterating numRelease variable. Alternative coding option where numRelease doesn't get iterated (happens in resetBall function)
+        } 
+
+      }
+
+      //This function holds calculations that are done every frame
+      function calcFunc() {
+        if (!trial) { return; }
+        
+        var dt = dtTimer.elapsedMSec();
+        dtTimer.reset();
+        
+        cursor.speed = distance(cursor.delta, [0, 0]); //compute speed
+        cursor.delta = [0, 0]; //reset to zero (critical!)
+
+        //Test if the cursor is at home
+        cursor.atHome = isHome(cursor.display, home.position, home.radius - cursor.radius) && cursor.speed < 10;
+      }
+
+      //This function holds the functionality for the different states. It updates every frame
+      function stateFunc() {
+        if (!requireFullscreen){
+          FS = true;
+          PL = true;
+        }
+        
+        //Check firebase, fullscreen, and pointer lock (unless in a state where they can be off)
+        if (!isMember(state.current, [state.CONNECTION, state.FULLSCREEN, state.PAUSE])) {
+          if (!FB && useFirebase){ //firebase connection flag
+            cursor.disableMovement = true;
+            cursor.changeColor = false;
+            state.push(state.CONNECTION);
+          }else if (!FS || !PL) { //fullscreen and pointer lock flags
+            cursor.disableMovement = true;
+            cursor.changeColor = false;
+            state.push(state.FULLSCREEN); //pushing the state effectively 'saves' the current state
+          }
+        }
+
+        switch (state.current) {
+          case state.START:
+            if (video.ready) {
+              state.next(state.GO);
+            } else if (!cursor.disableMovement && state.expiredMSec(500) && !video.ready)  {
+              consoleLog('Video did not load')
+              state.next(state.GO);
+            } else if (feedbackText==='' && video.ready && !trial.demoTrial && state.expiredMSec(150)) {
+              if (blockNumber == 3 && trialNumber ==0)
+              {feedbackText = 'If needed, take a brief break now.\n' + 'When ready click the ball to continue.'};
+              consoleLog('Ball not yet clicked')
+            }
+            break;
+
+          case state.GO:
+            if (state.expiredMSec(100) && ((mousePressed && recordSwitch == 'hold') || (mouseClicked && recordSwitch == 'click'))) {
+              feedbackText = '';
+              getScreenRefreshRate(function(FPS){ 
+              trial.screenRefreshRate = FPS;
+              });
+              state.next(state.RECORD); //advance to next state
+            }
+            break;
+
+          case state.RECORD:
+            if (!clickedOnBall && (inputdevice == 'Touch')){
+              feedbackText = 'Click on the ball to start';
+              cursor.changeColor = false;
+              state.next(state.START);
+            }
+            cursor.changeColor = true;
+            if ((!mousePressed && recordSwitch == 'hold') || (mouseClicked2 && recordSwitch == 'click')) {
+              if (cursor.recMoveAngle < 0 || cursor.recMoveAngle > Math.PI){
+                feedbackText = 'Aim the ball towards the target';
+                resetBall();
+              }
+              else if (!leftHome || (cursor.recMoveDistance < minMouseLength && (inputdevice == 'Mouse' || inputdevice == 'Track')) || (cursor.recMoveDistance < minTabletLength && inputdevice == 'Tablet')|| (cursor.recMoveDistance < minTouchLength && inputdevice == 'Touch')){
+                feedbackText = 'Move your hand towards the target';
+                resetBall();
+              }
+              else
+              {
+                feedbackText = '';
+                cursor.disableMovement = false
+                state.next(state.MOVING); //advance to next state
+              }
+            } 
+            break;
+          
+          case state.MOVING:
+            setDisplayedCursorPosition()
+            if (trialEnded) {
+              feedbackText = '';
+              if (cursor.hit) {
+                allButtons[trial.buttonHit].diffuseColors[0] = [1,1,0.2];
+                screenBackground.diffuseColors[0] = [1,1,1];
+                video.play();
+                buttonClickSound.play();
+                points.earned++;
+                points.text = currencyFormatter.format(points.earned / 100);
+              } else {
+                feedbackText = 'Miss';
+                sadFace.positions[0][1] = screenBackground.positions[0][1]-4;
+                cursor.disableMovement = true;
+                cursor.changeColor = false; //this will change the ball to the inactive color (default = red)
+              }
+              state.next(state.RETURN); //advance to next state
+            } 
+            break;
+
+          case state.RETURN:
+            //wait 2.5 sec before resetting for the next trial
+            if (state.expiredMSec(2500)) {
+              feedbackText = '';
+              sadFace.positions[0][1] = screenBackground.positions[0][1]+4;
+              cursor.disableMovement = true;
+              cursor.changeColor = false;
+              if (cursor.hit) {
+                allButtons[trial.buttonHit].diffuseColors[0] = [0,1,0];
+              }
+              state.next(state.FINISH); //advance to next state
+            }
+
+            break;
+
+          case state.FINISH:
+            if (trial.demoTrial && !state.expiredMSec(2500)) {
+              break;
+            }
+
+            //make sure all the data we need is in the trial object
+            trial.hit = cursor.hit;
+            trial.recMoveAngle = cursor.recMoveAngle * 180/Math.PI;
+            trial.actualMoveAngle = cursor.actualMoveAngle * 180/Math.PI;
+            trial.canvas = [canvas.width, canvas.height];
+            trial.home = [...home.position];
+            trial.target = [...target.position];
+            trial.numReleased = numReleased;
+            trial.gameAttemptNum = gameAttemptNum;
+
+            //add data to crashFile
+            crashFile.subjID_crash = subjID;
+            crashFile.uid_crash = uid;
+            crashFile.device_crash = inputdevice;
+            crashFile.blockNumber_crash = blockNumber;
+            crashFile.trialNumber_crash = trialNumber;
+            crashFile.displayTrialNumber_crash = displayTrialNumber;
+            crashFile.startDate_crash = startDate;
+            crashFile.conttrial_crash = conttrial;
+            crashFile.conttraj_all_crash = conttraj_all;
+            crashFile.conttraj_crash = conttraj;
+            crashFile.ballconttraj_crash = ballconttraj;
+            crashFile.block2lengths_crash = block2lengths;
+            crashFile.buttonSequence_crash = buttonSequence;
+            crashFile.videoOrder_crash = videoOrder;
+            crashFile.timeStamps_crash = timeStamps;
+            crashFile.gameAttemptNum_crash = gameAttemptNum;
+
+            //save the trial object, set flag in succesful callback
+            if(useFirebase){
+              firebaseTrialSave(trial, function() {
+                saveSuccessful_trial = true;
+              });
+              firebaseTrialSave(timeStamps, function() {
+                saveSuccessful_timeStamps = true;
+              });
+              firebaseCrashFileSave(crashFile, function() {
+                saveSuccessful_crash = true;
+              });
+            }
+            state.next(state.ADVANCE);
+            break;
+
+          case state.ADVANCE:
+            if ( (!saveSuccessful_trial || !saveSuccessful_timeStamps || !saveSuccessful_crash) && useFirebase) {
+              //don't do anything until firebase save returns successful
+              break;
+            }
+            trialNumber++;
+            displayTrialNumber++;
+            conttrial++;
+            contTrajTrial = 0;
+            ballcontTrajTrial = 0;
+
+            if (trialNumber < numTrials[blockNumber]) {
+              initTrial(trialNumber,blockNumber);
+            } else {
+                //condition for Block 2
+                if(blockNumber == 0){
+                    state.next(state.PAUSE);
+                    blockTransition = true;
+                    resetToStartState = true;
+
+                    //Do not call exitPointerLock for touchscreen
+                    if(inputdevice =="Touch"){
+                        PL = false;
+                    } else{
+                        document.exitPointerLock();
+                    }
+
+                    trialNumber = 0;
+                    displayTrialNumber = 1; //rest the trial number that is displayed between blocks 1 and 2 but not 2 and 3.
+                    blockNumber = 1; 
+                    numReleased = 0; //LAM added this. resetting numRelease when coming out of block 2 instructions.
+                    document.getElementById('trial-content').style.display = 'none';
+                    document.getElementById('block2_instructions-content').style.display = 'block';
+                    block2AudioInstructions.play();
+                    document.getElementById('block2_instructions-button').removeAttribute('disabled');
+                } else if(blockNumber == 1) {
+                    trialNumber = 0;
+                    blockNumber = 2; 
+                    initTrial(trialNumber,blockNumber);
+                //Laura added in 4th block
+                } else if(blockNumber == 2) {
+                    trialNumber = 0;
+                    blockNumber = 3; 
+                    //document.getElementById('break-content').style.display = 'block';
+                    initTrial(trialNumber,blockNumber);
+                } else{
+                    state.next(state.PAUSE);
+                    experimentFinished = true;
+                    wjsExitFullscreen(document);
+
+                    //Do not call exitPointerLock for touchscreen
+                    if(inputdevice =="Touch"){
+                        PL = false;
+                    } else{
+                        document.exitPointerLock();
+                        consoleLog("pointer lock disabled")
+                    }
+
+                    document.getElementById('trial-content').style.display = 'none';
+                    document.getElementById('end-content').style.display = 'block';
+                    consoleLog("Game Completed")
+                    if(useFirebase){
+                        firebaseCrashFileDelete();
+                        consoleLog("Crash File Deleted")
+                    } 
+                }
+            }
+            break;
+
+          case state.FULLSCREEN:
+            if (FS && PL) {
+              state.pop();
+              dtTimer.reset();
+            }
+            break;
+            
+          case state.CONNECTION:
+            if (FB) {
+              state.pop();
+              dtTimer.reset();
+            }
+            break;
+        }
+      }
+
+      //This function updates the display every frame
+      function displayFunc() {
+        //nothing to draw in these states
+        if (state.current < state.START || state.current > state.ADVANCE) { return; }
+        
+        //Record time of current screen refresh
+        trial.screenRefreshTime.push(performance.now());
+
+        //Draw the shadow map
+        if (light.shadowsOn){
+          gl.bindFramebuffer(gl.FRAMEBUFFER, light.shadowMapFBO);
+          gl.viewport(0, 0, shadows.textureSize, shadows.textureSize);
+          gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+          drawObjectShadowMap(gl, shadowShaderProgram, button3, light.viewProjection);
+          drawObjectShadowMap(gl, shadowShaderProgram, cursor, light.viewProjection);
+          gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+         }
+
+        //Clear
+        canvasContext.clearRect(0, 0, canvas.width, canvas.height); //Clear 2d canvas
+        gl.viewport(0, 0, glCanvas.width, glCanvas.height);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT); //Clear WebGL canvas
+        
+        //draw instruction and feedback text
+        if (trial.demoTrial) {
+          if (!state.expiredMSec(200) && state.current !== state.MOVING) {
+            instructionText = ''; //clear text at start of every state, to make change more obvious
+          } else {
+            if (state.current === state.START) {
+              instructionText = 'Click the mouse to start';
+            //} else if (state.current === state.DELAY) {
+            // instructionText = 'Wait for the target to light up...'
+            } else if (state.current === state.GO) {
+              instructionText = 'Drag the mouse to aim the ball, let go to launch the ball';
+            } else if (state.current === state.RETURN) {
+              if (cursor.hit) {
+                instructionText = 'Nice job!'
+              } else {
+                instructionText = 'You missed!'
+              }
+            } else if (state.current === state.FINISH) {
+              instructionText = 'Good work. That was one trial.\n'+
+                'There are '+numDemoTrials+' trials in total.\n'+
+                'Please try to finish without taking a break.';
+            }
+          }
+          drawText([(canvas.width / 2), (canvas.height / 5)], instructionText, 16, 'green');
+        } else {
+          drawText([(canvas.width / 2), (canvas.height / 10)], feedbackText, 30, 'red');
+        }
+        
+        //Draw trial number text
+        drawText([20, canvas.height*.8], 'Trial: ' + (displayTrialNumber), 14, 'black', 'left');
+
+        //Draw exit full screen text 
+        drawText([20, canvas.height*.9], 'Press ESC to quit', 12, 'black', 'left');
+
+        //Draw giphy text 
+        drawText([canvas.width*.98, canvas.height*.9], 'All clips from giphy.com', 12, 'black', 'right');
+
+        //Set home position color to signal atHome      
+        //home.diffuseColors[0] = cursor.atHome ? home.activeColor : home.inactiveColor;
+        
+        //Set cursor color to signal whether activated
+        cursor.diffuseColors[0] = cursor.changeColor ? cursor.activeColor : cursor.inactiveColor;
+
+        //Update video texture
+        if (video.ready) { updateVideoTexture(gl, videoTexture, video, 1); }
+        
+        //Draw 3d objects
+        drawObject(gl, shaderProgram, home);
+        drawObject(gl, shaderProgram, cursor);
+        drawObject(gl, shaderProgram, floor);
+        //drawObject(gl, shaderProgram, screen);
+        drawObject(gl, shaderProgram, screenBackground);
+        drawObject(gl, shaderProgram, gameBackdrop);
+        drawObject(gl, shaderProgram, gameEnvironmentBottom);
+        drawObject(gl, shaderProgram, sadFace);
+        drawObject(gl, shaderProgram, button3);
+      }
+
+      //This function adds all of the event listeners
+      function addEventListeners() {
+        //ONLOAD
+        window.addEventListener('DOMContentLoaded', browserCheck);
+
+        //Enable Screen Orientation Listener 
+        if (bowser.parse(window.navigator.userAgent).browser.name === "Safari"){
+            window.addEventListener('orientationchange', function(event) {
+            consoleLog("enter screen orientation change listener")
+            readDeviceOrientation();
+            })
+        } else{
+            screen.orientation.addEventListener('change', function(event) { 
+            consoleLog("enter screen orientation change listener")
+            readDeviceOrientation();
+            })
+        }
+
+        //Check the device and orientation of the screen; require landscape to continue
+        if (bowser.parse(window.navigator.userAgent).platform.type == "mobile"){
+            requireFullscreen = false;
+            mobilePlatform = true;
+
+            document.getElementById('homepage-content').style.display = 'none';
+            document.getElementById('phoneDetected-content').style.display = 'block';
+            consoleLog("This game version is not supported on this device :(")
+
+        } else{
+            if (bowser.parse(window.navigator.userAgent).browser.name === "Safari"){
+                
+                //If using Safari, check whether window.orientation is defined (will be defined when using an iPad). 
+                //If defined, check for landscape orientation and prompt for rotation. Otherwise, proceed to homepage
+                if ( Math.abs(window.orientation) === 90 ){
+                    consoleLog("Screen is in landscape: " + window.orientation)
+                    document.getElementById('screenOrientation-content').style.display = 'none';
+                    document.getElementById('homepage-content').style.display = 'block';
+                } else if( window.orientation === 0 || window.orientation === 180) {
+                    consoleLog("Screen is in portrait: " + window.orientation)
+                    document.getElementById('homepage-content').style.display = 'none';
+                    document.getElementById('screenOrientation-content').style.display = 'block';
+                    correctOrientation = false;
+                } else{
+                    document.getElementById('homepage-content').style.display = 'block';
+                } 
+            } else{
+                if ( window.screen.orientation.type === "landscape-primary" || window.screen.orientation.type === "landscape-secondary"){
+                    consoleLog("Screen is in landscape: " + window.screen.orientation.type)
+                    document.getElementById('screenOrientation-content').style.display = 'none';
+                    document.getElementById('homepage-content').style.display = 'block';
+                } else if (window.screen.orientation.type === "portrait-primary" || window.screen.orientation.type === "portrait-secondary"){
+                    consoleLog("Screen is in portrait: " + window.screen.orientation.type)
+                    document.getElementById('homepage-content').style.display = 'none';
+                    document.getElementById('screenOrientation-content').style.display = 'block';
+                    correctOrientation = false;
+                } else if (window.screen.orientation.type === undefined){
+                    consoleLog("The orientation API isn't supported in this browser :(")
+                }
+            }
+        }
+
+        //If connected to Firebase, enable crash file loading 
+        if(useFirebase){
+            document.getElementById('crash-button').removeAttribute('disabled')
+        }
+
+        //HOME PAGE => FULLSCREEN
+        document.getElementById('homepage-fullscreen-button').addEventListener('click', function(event) {
+          event.preventDefault(); //prevent the default form submission
+          if(requireFullscreen){
+             wjsRequestFullscreen(document.body); //custom function that supports Safari
+          }
+          document.getElementById('homepage-content').style.display = 'none';
+          document.getElementById('survey-content').style.display = 'block';
+          gameStartSound.play();
+          if(useFirebase){
+          firebaseSignIn(function() {
+            document.getElementById('survey-button').removeAttribute('disabled')
+          }); 
+          } else {
+            document.getElementById('survey-button').removeAttribute('disabled')
+          }
+        });
+
+        //Program Crashed Button
+        document.getElementById('crash-button').addEventListener('click', function(event) {
+          document.getElementById('homepage-content').style.display = 'none';
+          gameStartSound.play();
+          if(requireFullscreen){
+             wjsRequestFullscreen(document.body); //custom function that supports Safari
+          }
+          document.getElementById('crash-content').style.display = 'block';
+        });
+
+        //Load Crashed Data 
+        document.getElementById('loadCrash-button').addEventListener('click', function(event) {
+          subjID = document.getElementById('crashedSubjID').value;
+          document.getElementById('crash-content').style.display = 'none';
+          consoleLog("SubjID to Load: " + subjID)
+
+          //Load participant data from crashed file
+          firebaseCrashFileLoad();
+
+          setTimeout(function() {
+              if(subjCrashedData != null){
+                    crashDataLoaded = true;
+
+                    //Sign into firebase and assign variables from load crash data
+                    firebaseSignIn(function() {
+                         subjID = subjCrashedData.subjID_crash;
+                         inputdevice = subjCrashedData.device_crash;
+                         startDate = subjCrashedData.startDate_crash;
+                         blockNumber = subjCrashedData.blockNumber_crash;
+                         trialNumber = subjCrashedData.trialNumber_crash +1;
+                         displayTrialNumber = subjCrashedData.displayTrialNumber_crash +1;
+                         conttrial = subjCrashedData.conttrial_crash +1;
+                         conttraj_all = subjCrashedData.conttraj_all_crash;
+                         conttraj = subjCrashedData.conttraj_crash;
+                         ballconttraj = subjCrashedData.ballconttraj_crash;
+                         timeStamps = subjCrashedData.timeStamps_crash;
+                         block2lengths = subjCrashedData.block2lengths_crash;
+                         buttonSequence = subjCrashedData.buttonSequence_crash;
+                         videoOrder = subjCrashedData.videoOrder_crash;
+                         gameAttemptNum = subjCrashedData.gameAttemptNum_crash +1;
+
+                         //Check to see if game crashed between blocks 
+                         if (trialNumber + 1 > numTrials[blockNumber]){
+                            if (blockNumber == 0){
+                                blockTransition = true;
+                                resetToStartState = true;
+                                trialNumber = 0;
+                                displayTrialNumber = 1; //rest the trial number that is displayed between blocks 1/2 and 4/5 but not 2, 3, 4.
+                                blockNumber = 1; 
+                            } else if (blockNumber == 1) {
+                                trialNumber = 0;
+                                blockNumber = 2; 
+                            } else if (blockNumber == 2) {
+                                trialNumber = 0;
+                                blockNumber = 3; 
+                            } else if (blockNumber == 3) {
+                                blockTransition = true;
+                                resetToStartState = true;
+                                trialNumber = 0;
+                                displayTrialNumber = 1; //rest the trial number that is displayed between blocks 1/2 and 4/5 but not 2, 3, 4.
+                                blockNumber = 4; 
+                            } 
+                         }
+
+                         //Check if the uid from the crash file matches the current uid
+                         if (uid == subjCrashedData.uid_crash){
+                            //If the current uid matches, clear the incomplete trial/set the Trajectories node at the conttrial level to []
+                            firebaseClearIncompleteTrajectory(function() {
+                                saveSuccessful = true;
+                            });
+                            
+                            //If the current uid matches, clear the incomplete trial/set the BallTrajectories node at the conttrial level to []
+                            firebaseClearIncompleteBallTrajectory(function() {
+                                saveSuccessful = true;
+                            });
+                         } 
+
+                         //Save the crashed and new UIDs to firebase
+                         var crashFileLoaded = {
+                             status: true,
+                             crashedSubjID: subjCrashedData.subjID_crash,
+                             crashedUID: subjCrashedData.uid_crash,
+                             currentUID: uid,
+                             currentBrowser: browserInfo.browser,
+                             currentOs: browserInfo.os,
+                             trialNumber: 'crash'
+                         };
+                         firebaseTrialSave(crashFileLoaded, function() {
+                            saveSuccessful = true;
+                            consoleLog("Crash UID saved to firebase")
+                         });
+                         document.getElementById('crashDataLoaded-content').style.display = 'block';
+                    }); 
+              } else{
+                    //If there is no crash file associated with the entered subjID, prompt to re-start the game.
+                    document.getElementById('crashDataNotLoaded-content').style.display = 'block';
+              }
+          }, 1000);
+        });
+
+        //Crash Data Loaded
+        document.getElementById('crashDataLoaded-button').addEventListener('click', function(event) {
+          
+          document.getElementById('crashDataLoaded-content').style.display = 'none';
+
+          //Determine which block instructions to display 
+          if(blockNumber == 0){
+            document.getElementById('block1_instructions-content').style.display = 'block';
+            block1AudioInstructions.play();
+            document.getElementById('block1_instructions-button').removeAttribute('disabled');
+          } else{
+            document.getElementById('block2_instructions-content').style.display = 'block';
+            block2AudioInstructions.play();
+            document.getElementById('block2_instructions-button').removeAttribute('disabled');
+            resetToStartState = true;
+          }
+        });
+        
+        //Crash Data Not Loaded
+        document.getElementById('crashDataNotLoaded-button').addEventListener('click', function(event) {
+            document.getElementById('crashDataNotLoaded-content').style.display = 'none';
+            document.getElementById('homepage-content').style.display = 'block';
+        });
+        
+        //SURVEY - Participant Data
+        document.getElementById('survey-form').addEventListener('submit', function(event) {
+          event.preventDefault();
+          var data = new FormData(event.target);
+          var surveydata = Object.fromEntries(data.entries());
+          surveydata.date = getFormattedDateObject();
+          surveydata.browser = browserInfo.browser;
+          surveydata.os = browserInfo.os;
+          surveydata.trialNumber = 'info';
+          surveydata.stateNames = stateNames;
+          surveydata.videoOrder = videoOrder;
+
+          subjID = surveydata.subjID;
+          inputdevice = surveydata.inputdevice;
+           //change speed scalar for in person tablet
+                    if(inputdevice =="Tablet"){
+                        cursor.speedScalar = 0.01; 
+                        consoleLog("speed scalar different")
+                    } else{
+                        cursor.speedScalar = 0.02; //originally 0.05
+                        
+                    }          
+                    surveydata.currentSpeedScalar = cursor.speedScalar;
+          document.getElementById('survey-button').setAttribute('disabled',''); 
+
+
+           //Save the start date when the survey page is started 
+           var currentTime = new Date();
+           startDate = currentTime.getFullYear() + '_' + (currentTime.getMonth()+1) + '_' + currentTime.getDate() + '_' + currentTime.getHours() + '-' + currentTime.getMinutes() + '-' + currentTime.getSeconds();
+
+          if(useFirebase){
+          firebaseTrialSave(surveydata, function() {
+            surveydata.uid = [];
+            document.getElementById('survey-content').style.display = 'none';
+            document.getElementById('block1_instructions-content').style.display = 'block';
+            block1AudioInstructions.play();
+            setTimeout(function() {
+              document.getElementById('block1_instructions-button').removeAttribute('disabled');
+            }, 0);
+          });
+          } else {
+            document.getElementById('survey-content').style.display = 'none';
+            document.getElementById('block1_instructions-content').style.display = 'block';
+            block1AudioInstructions.play();
+            document.getElementById('block1_instructions-button').removeAttribute('disabled');
+          }
+            //save the button data object, set flag in succesful callback
+            if(useFirebase){
+                firebaseTrialSave(buttonData, function() {
+                saveSuccessful_button = true;
+            });
+            }
+        });
+
+        //INSTRUCTIONS - Block 1
+        document.getElementById('block1_instructions-button').addEventListener('click', function(event) {
+          initTrial(trialNumber,blockNumber); //this should be the first call to initTrial
+          document.getElementById('block1_instructions-content').style.display = 'none';
+
+          //Stop the audio instructions when the button is pressed
+          block1AudioInstructions.pause();
+          block1AudioInstructions.currentTime = 0;
+          if(FS){
+            document.getElementById('pointerlock-content').style.display = 'block';
+          } else {
+            document.getElementById('fullscreen-content').style.display = 'block';
+          }
+          
+        });
+
+        //INSTRUCTIONS - Block 2&3
+        document.getElementById('block2_instructions-button').addEventListener('click', function(event) {
+          initTrial(trialNumber,blockNumber);
+          document.getElementById('block2_instructions-content').style.display = 'none';
+
+          //Stop the audio instructions when the button is pressed
+          block2AudioInstructions.pause();
+          block2AudioInstructions.currentTime = 0;
+          if(FS){
+             state.next(state.FULLSCREEN);
+             if(inputdevice=="Touch"){
+                PL = true;
+                document.getElementById('trial-content').style.display = 'block';
+                //For touch, before the first trial after the block transition, need to set state to START to re-start trial logic
+                state.next(state.START);
+                resetToStartState = false;
+             } else{
+                //if game remains in fullscreen during instructions, pointer lock is automatically re-initiated here
+                document.body.requestPointerLock();
+                consoleLog('Block Transition: pointer lock requested')
+             }
+             blockTransition = false;
+          } else {
+            document.getElementById('fullscreen-content').style.display = 'block';
+            blockTransition = false;
+          }
+        });
+
+        //FULLSCREEN button on game quit page
+        document.getElementById('fullscreen-button').addEventListener('click', function(event) {
+          //document.body.requestFullscreen();
+          wjsRequestFullscreen(document.body); //custom function that supports Safari
+        });
+        
+        //POINTER LOCK
+          document.getElementById('pointerlock-button').addEventListener('click', function(event) {
+           updateCanvas();
+            consoleLog('Device = ' + inputdevice)
+            if(inputdevice=="Touch"){
+                document.getElementById('pointerlock-content').style.display = 'none';
+                document.getElementById('trial-content').style.display = 'block';
+                PL = true;
+
+                //For touch condition, in the first trial after block transition, need to set state to START to re-start trial logic
+                if(resetToStartState){
+                  resetBall()
+                  resetToStartState = false;
+                }
+            } else{
+                document.body.requestPointerLock();
+                consoleLog('pointer lock requested')
+            }
+
+        });
+
+        //QUIT GAME
+          document.getElementById('quit-button').addEventListener('click', function(event) {
+             document.getElementById('fullscreen-content').style.display = 'none';
+             document.getElementById('endEarly-content').style.display = 'block';
+        });
+        
+        //FULLSCREEN
+        ['fullscreenchange', 'webkitfullscreenchange'].forEach(function(eventName){
+          document.addEventListener(eventName, (event) => {
+            var fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement;
+            if (fullscreenElement && preGameStart) {
+              preGameStart = false; //Update to false after the game home page. 
+              consoleLog(`Entering full-screen mode on ${fullscreenElement}.`);
+              updateCanvas();
+              FS = true;
+            } else if (fullscreenElement && !preGameStart) {
+              consoleLog(`Entering full-screen mode on ${fullscreenElement}.`);
+              document.getElementById('fullscreen-content').style.display = 'none';
+              document.getElementById('pointerlock-content').style.display = 'block';
+              updateCanvas();
+              FS = true;
+            } else {
+              consoleLog('Exiting full-screen mode.');
+              if(state.current!==state.PAUSE && requireFullscreen){
+                document.getElementById('trial-content').style.display = 'none';
+                document.getElementById('pointerlock-content').style.display = 'none';
+                document.getElementById('fullscreen-content').style.display = 'block';
+                trial.missTrial = true;
+                trial.missTrialMsg = 'fullscreenExited';
+              }
+              FS = false;
+
+              if(inputdevice=="Touch"){
+                //Neccessary to reset pointerlock status here for game logic on touchscreen devices
+                PL = false;
+              }
+            }
+          });
+        });
+
+        //POINTER LOCK CHANGE
+        document.addEventListener('pointerlockchange', (event) => {
+           if (blockTransition && !experimentFinished){
+                 //Do not lock the pointer if during block transistion
+                  return;
+           }
+
+          if (document.pointerLockElement){
+            consoleLog(`Entering pointer lock on ${document.pointerLockElement.id}.`);
+            document.getElementById('pointerlock-content').style.display = 'none';
+            document.getElementById('trial-content').style.display = 'block';
+            PL = true;
+
+            //For mouse/trackpad, in the first trial after block transition, need to set state to START to re-start trial logic
+            if(resetToStartState){
+                state.next(state.START);
+                resetToStartState = false;  
+            }
+
+          } else {
+            consoleLog('Exiting pointer lock.');
+
+            //If game is exited in the middle of a trial, reset ball to home position as if right mouse clicked; iterate numReleased 
+            //For Safari, full screen is exited before pointer lock is disabled therefore state.FULLSCREEN must be included here
+            if (isMember(state.current, [state.START, state.GO, state.MOVING, state.FULLSCREEN])){ 
+                resetBall()
+            }
+
+            var fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement;
+            if (fullscreenElement) { 
+              wjsExitFullscreen(document);
+            }else if (state.current!==state.PAUSE && requireFullscreen){
+              document.getElementById('trial-content').style.display = 'none';
+              document.getElementById('pointerlock-content').style.display = 'none';
+              document.getElementById('fullscreen-content').style.display = 'block';
+              trial.missTrial = true;
+              trial.missTrialMsg = 'pointerlockDisabled';
+            }
+            PL = false;
+          }
+        }, false);
+        
+        document.addEventListener('pointerlockerror', (event) => {
+          alert('Error: Pointer lock request failed!');
+        }, false);
+
+        //MOUSE and Trackpad
+        document.body.addEventListener('mousemove', handleInputMove);
+        document.body.addEventListener("mousedown", setMousePressedTrue);
+        document.body.addEventListener("mouseup", setMousePressedFalse);
+        document.body.addEventListener('pointermove', handlePointerMove);
+
+        //TOUCHSCREEN
+        document.body.addEventListener('touchstart', setMousePressedTrue);
+        document.body.addEventListener('touchmove', handleInputMove);
+        document.body.addEventListener('touchend', setMousePressedFalse);
+
+        //RESIZE
+        window.addEventListener('resize', handleResize);
+        
+        //PAGE CLOSE ALERT
+        window.addEventListener('beforeunload', function(){
+          if(!experimentFinished){
+            return event.returnValue = 'Are you sure you want to quit?';
+          }
+        });
+        
+        //FIREBASE DISCONNECT
+        if(useFirebase){
+          firebase.database().ref().child('.info/connected').on('value', function(connectedSnap) {
+          if (connectedSnap.val() === true) {
+            document.getElementById('page-content').style.display = 'block';
+            document.getElementById('connection-content').style.display = 'none';
+            FB = true;
+          } else {
+            document.getElementById('page-content').style.display = 'none';
+            document.getElementById('connection-content').style.display = 'block';
+            FB = false;
+          }
+        });
+        }
+      }
+
+      //This function handles changing between states
+      function handleStateChange() {
+        trial.stateChange.push(state.current);
+        trial.stateChangeTime.push(performance.now());
+      }
+
+      //This function is for handling input movement, mostly during the RECORD stage
+      function handleInputMove(event) {
+        if (mousePressed && (state.current == state.RECORD || state.current == state.GO || state.current == state.START)) {
+          
+          // New variable to check that movement has occured; prevents calculating movement angle from just a click
+          if (!leftHome){
+            leftHome = true
+          }
+
+          //Calculates the movement deltas
+          if (inputdevice == 'Touch') {
+            mouseXY = getMousePos(glCanvas,event);
+            if (!(mousePrevXY[0] == 0 && mousePrevXY[1] == 0)){
+              cursor.delta[0] = mouseXY[0] - mousePrevXY[0];
+              cursor.delta[1] = mouseXY[1] - mousePrevXY[1];
+            }
+            mousePrevXY = mouseXY
+          } else if (inputdevice == 'Mouse' || inputdevice == 'Track' || inputdevice == 'Tablet') {
+            cursor.delta[0] = event.movementX;
+            cursor.delta[1] = -event.movementY;
+          }
+          
+          //Updates the cumulative recorded delta
+          cursor.cumRecDelta[0] += cursor.delta[0];
+          cursor.cumRecDelta[1] += cursor.delta[1];
+
+          //Calculates the move angle from the cumulative recorded deltas
+          if (inputdevice == 'Touch') {
+            cursor.recMoveAngle = Math.atan2(cursor.cumRecDelta[0],cursor.cumRecDelta[1]) + Math.PI*3/2;
+            } else if (inputdevice == 'Mouse' || inputdevice == 'Track' || inputdevice == 'Tablet') {
+            cursor.recMoveAngle = -Math.atan2(cursor.cumRecDelta[0],cursor.cumRecDelta[1]) + Math.PI/2;
+          }
+
+          //Adds perturbation
+          cursor.actualMoveAngle = cursor.recMoveAngle + trial.perturbation*Math.PI/180;
+
+          //Fixes weird stuff with trigonometry that i dont really understand
+          for (;cursor.actualMoveAngle > Math.PI*2;) {
+            cursor.actualMoveAngle += Math.PI*-2
+          }
+          for (;cursor.recMoveAngle > Math.PI*2;) {
+            cursor.recMoveAngle += Math.PI*-2
+          }
+          
+          //Saves total recorded distance for checking if the user made a large enough movement
+          cursor.recMoveDistance = Math.sqrt((cursor.cumRecDelta[0])**2 + (cursor.cumRecDelta[1])**2);
+
+          //Saves the important data to firebase; trajMatrix holds a single frame of data and saves to Firebase immediately
+          trajMatrix.data = [event.timeStamp, blockNumber, trialNumber, cursor.delta[0], cursor.delta[1], cursor.cumRecDelta[0], cursor.cumRecDelta[1], 0, 0, 0, 0, 0, 0, 0, 0, numReleased, conttraj, state.current, conttraj_all];
+          trajMatrix.conttraj_all = conttraj_all;
+          trajMatrix.conttraj = conttraj;
+          trajMatrix.contTrajTrial = contTrajTrial;
+          
+          //save the trial object, set flag in succesful callback
+          if(useFirebase){
+            firebaseTrialSave(trajMatrix, function() {
+             saveSuccessful = true;
+             trajMatrix.data = [];
+            });
+          }
+          conttraj_all++;
+          conttraj++;
+          contTrajTrial++;
+       
+          //Sets the move angle to the perturbation for block 3
+          if (blockNumber == 2){
+                cursor.actualMoveAngle = trial.perturbation*Math.PI/180 + Math.PI/2
+          }
+        }
+      }
+      
+      //This function does ??
+      function handlePointerMove(event) {
+        if ( !(browserName.includes('Chrome') || browserName.includes('Edge')) ||
+              (!document.pointerLockElement && requireFullscreen) ) {
+          return;
+        }
+        
+        //Records the coalesced points for games played in Chrome or Edge
+        if (trial && state.current >= state.START && state.current < state.RETURN) {
+          var eSeq = event.getCoalescedEvents();
+          for (let e of eSeq){
+            trial.dxCo.push(e.movementX);
+            trial.dyCo.push(-e.movementY);
+            trial.tCo.push(e.timeStamp);
+            trial.stateCo.push(state.current);
+            trial.conttrajArray.push(conttraj);
+          }
+        }
+      }
+
+      //This function is for checking if the mouse is pressed down, also checks if the ball was clicked
+      function setMousePressedTrue(event){
+
+        if (event.button == 0 && (state.current == state.START || state.current == state.GO)){
+            trial.ballClickedTime = performance.now();
+            timeStamps.ballClickedTimestamp[conttrial] = getFormattedDateObject().string;
+            mousePressed = true
+            mouseClicked = true
+
+            //Saves the mouse click data to trajMatrix
+            //Holds a single frame of data and saves to Firebase immediately
+            trajMatrix.data = [event.timeStamp, blockNumber, trialNumber, cursor.delta[0], cursor.delta[1], cursor.cumRecDelta[0], cursor.cumRecDelta[1], 0, 0, 0, 0, 0, 0, 0, 0, numReleased, conttraj, state.current, conttraj_all];
+            trajMatrix.conttraj_all = conttraj_all;
+            trajMatrix.conttraj = conttraj;
+            trajMatrix.contTrajTrial = contTrajTrial;
+          
+            //save the trial object, set flag in succesful callback
+            if(useFirebase){
+            firebaseTrialSave(trajMatrix, function() {
+                saveSuccessful = true;
+                trajMatrix.data = [];
+            });
+            }
+            conttraj_all++;
+            conttraj++;
+            contTrajTrial++;
+
+        }else if (event.button == 0 && state.current == state.RECORD){
+          mouseClicked2 = true
+
+            // WILL NEED TO TEST THIS FOR THE CLICK IMPLEMENTATION!
+            //Saves the mouse click data to trajMatrix
+            //Holds a single frame of data and saves to Firebase immediately
+            trajMatrix.data = [event.timeStamp, blockNumber, trialNumber, cursor.delta[0], cursor.delta[1], cursor.cumRecDelta[0], cursor.cumRecDelta[1], 0, 0, 0, 0, 0, 0, 0, 0, numReleased, conttraj, state.current, conttraj_all];
+            trajMatrix.conttraj_all = conttraj_all;
+            trajMatrix.conttraj = conttraj;
+            trajMatrix.contTrajTrial = contTrajTrial;
+          
+            //save the trial object, set flag in succesful callback
+            if(useFirebase){
+            firebaseTrialSave(trajMatrix, function() {
+                saveSuccessful = true;
+                trajMatrix.data = [];
+            });
+            }
+            conttraj_all++;
+            conttraj++;
+            contTrajTrial++;
+        }
+
+        //When using a touchscreen, checks if the user clicked the ball when in correct state
+        if ((inputdevice == 'Touch') && (state.current == state.START || state.current == state.GO)){
+          trial.ballClickedTime = performance.now();
+          timeStamps.ballClickedTimestamp[conttrial] = getFormattedDateObject().string;  
+        
+          consoleLog('(setMousePressedDown) Event type: ' + event.type)
+
+          let xy = getMousePos(glCanvas,event);
+          let ray = raycastCanvas(xy[0],xy[1]);
+          let intersect = rayPlaneIntersect(ray, {normal: [0,0,1], point: floor.positions[0]});
+          clickedOnBall = isHome([intersect[0],intersect[1]],[home.position[0],home.position[1]+cursor.radius*2],cursor.radius*2); //Increased threshold for clicking ball
+          mousePressed = clickedOnBall;
+
+          // added by NMH 2/21/2023 to handle clicks off of the ball on touch
+          if(!clickedOnBall){
+            feedbackText = 'Click on the ball to start';
+          } else {
+
+            // Set the starting ball position to the position where the ball was touched.
+            mousePrevXY = xy; 
+
+            //Saves the touch click data to trajMatrix
+            //Holds a single frame of data and saves to Firebase immediately
+            trajMatrix.data = [event.timeStamp, blockNumber, trialNumber, cursor.delta[0], cursor.delta[1], cursor.cumRecDelta[0], cursor.cumRecDelta[1], 0, 0, 0, 0, 0, 0, 0, 0, numReleased, conttraj, state.current, conttraj_all];
+            trajMatrix.conttraj_all = conttraj_all;
+            trajMatrix.conttraj = conttraj;
+            trajMatrix.contTrajTrial = contTrajTrial;
+          
+            //save the trial object, set flag in succesful callback
+            if(useFirebase){
+            firebaseTrialSave(trajMatrix, function() {
+                saveSuccessful = true;
+                trajMatrix.data = [];
+            });
+            }
+            conttraj_all++;
+            conttraj++;
+            contTrajTrial++;
+          }
+        }
+      }
+
+      //This function is for checking if the mouse is pressed down
+      function setMousePressedFalse(event){
+        if (event.button == 0 || inputdevice == 'Touch'){
+          mousePressed = false
+        }
+      }
+
+      //This function is to set the displayed cursor position
+      function setDisplayedCursorPosition(){
+        if (state.current == state.MOVING && !trialEnded){
+          //Update cursor positions based on the move angle
+          cursor.display[0] += Math.cos(cursor.actualMoveAngle) * cursor.speedScalar;
+          cursor.display[1] += Math.sin(cursor.actualMoveAngle) * cursor.speedScalar;
+
+          //Check if cursor has moved out of the bounds of the game
+          if ((cursor.display[0] <= cursor.xmin || cursor.display[0] >= cursor.xmax)&& !trialEnded){
+            XoutOfBounds = true;
+          } else {
+            XoutOfBounds = false;
+          }
+          if ((cursor.display[1] <= cursor.ymin || cursor.display[1] >= cursor.ymax) && !trialEnded){
+            YoutOfBounds = true;
+          } else {
+            YoutOfBounds = false;
+          }
+
+          //If the ball is out of bounds ends trial
+          if (XoutOfBounds || YoutOfBounds){
+            checkForButtonHit();
+            trialEnded = true;
+            trial.endTrialTime = performance.now();
+            timeStamps.endTrialTimestamp[conttrial] = getFormattedDateObject().string;
+          }
+
+          //Update the 3D cursor position used for rendering
+          cursor.positions[0][0] = cursor.display[0];
+          cursor.positions[0][1] = cursor.display[1];
+
+          //Updates the ball trajectory matrix
+          ballTrajMatrix.data = [blockNumber, trialNumber, cursor.display[0], cursor.display[1], numReleased, ballconttraj, state.current, conttraj_all];
+          ballTrajMatrix.conttraj_all = conttraj_all;
+          ballTrajMatrix.ballconttraj = ballconttraj;
+          ballTrajMatrix.ballcontTrajTrial = ballcontTrajTrial;
+          
+          //Save the trial object, set flag in succesful callback
+          if(useFirebase){
+            firebaseTrialSave(ballTrajMatrix, function() {
+             saveSuccessful = true;
+             ballTrajMatrix.data = [];
+            });
+          }
+          conttraj_all++;
+          ballconttraj++;
+          ballcontTrajTrial++;
+        } else if (state.current === state.ADVANCE || blockTransition) {
+          //update the 3D cursor position used for rendering to home position between trials
+          cursor.display = [0, 0];
+          cursor.positions[0][0] = [...home.position][0];
+          cursor.positions[0][1] = [...home.position][1];
+        }
+      }
+
+      //This function checks if the button was hit
+      function checkForButtonHit(){
+        if (cursor.actualMoveAngle > 80*Math.PI/180 && cursor.actualMoveAngle < 100*Math.PI/180){
+          trial.buttonHit = target.buttonNumber;
+          cursor.hit = true;
+          cursor.diffuseColor = [cursor.activeColor];
+        } else {
+          cursor.hit = false;
+          trial.buttonHit = 999;
+        }
+      } 
+
+      /**This function obtains the estimated Hz of the primary monitor in the system.
+        * @param {Function} callback The function triggered after obtaining the estimated Hz of the monitor.
+        * @param {Boolean} runIndefinitely If set to true, the callback will be triggered indefinitely (for live counter).
+        Source: https://ourcodeworld.com/articles/read/1390/how-to-determine-the-screen-refresh-rate-in-hz-of-the-monitor-with-javascript-in-the-browser
+    */ 
+      function getScreenRefreshRate(callback, runIndefinitely){
+        let requestId = null;
+        let callbackTriggered = false;
+        runIndefinitely = runIndefinitely || false;
+
+        if (!window.requestAnimationFrame) {
+            window.requestAnimationFrame = window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+        }
+    
+        let DOMHighResTimeStampCollection = [];
+
+        let triggerAnimation = function(DOMHighResTimeStamp){
+            DOMHighResTimeStampCollection.unshift(DOMHighResTimeStamp);
+        
+            if (DOMHighResTimeStampCollection.length > 10) {
+                let t0 = DOMHighResTimeStampCollection.pop();
+                let fps = Math.floor(1000 * 10 / (DOMHighResTimeStamp - t0));
+
+                if(!callbackTriggered){
+                    callback.call(undefined, fps, DOMHighResTimeStampCollection);
+                }
+
+                if(runIndefinitely){
+                    callbackTriggered = false;
+                }else{
+                    callbackTriggered = true;
+                }
+            }
+    
+            requestId = window.requestAnimationFrame(triggerAnimation);
+        };
+    
+        window.requestAnimationFrame(triggerAnimation);
+
+        //Stop after half second if it shouldn't run indefinitely
+        if(!runIndefinitely){
+            window.setTimeout(function(){
+                window.cancelAnimationFrame(requestId);
+                requestId = null;
+            }, 500);
+        }
+    }
+
+      //This function resets the ball to its home position and sets the state to START
+      function resetBall(){
+        cursor.recMoveDistance = 0;
+        cursor.position = [...home.position];
+        cursor.cumRecDelta = [0,0];
+        cursor.recMoveAngle = 0;
+        cursor.actualMoveAngle = 0;
+        cursor.display = [0,0];
+        XoutOfBounds = false;
+        YoutOfBounds = false;
+        setDisplayedCursorPosition();
+        numReleased++;
+        cursor.disableMovement = true;
+        cursor.changeColor = false;
+        mousePrevXY = [0,0];
+        leftHome = false;
+        state.next(state.START);
+      }
+
+      //This function is for reading the device orientation
+      function readDeviceOrientation() {
+        
+        if (bowser.parse(window.navigator.userAgent).browser.name === "Safari"){
+            consoleLog("Enter Safari orientation check")
+
+            if (Math.abs(window.orientation) !== 90) {
+                //Portrait
+                consoleLog("Please rotate your device back to landscape")
+                correctOrientation = false;
+
+                //If pre-Game
+                if(document.getElementById('homepage-content').style.display === 'block'){
+                    previousScreen = 'homepage-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientation-content').style.display = 'block';
+                }
+
+                //If on crash page 
+                if(document.getElementById('crash-content').style.display === 'block'){
+                    previousScreen = 'crash-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientationChange-content').style.display = 'block';
+                }
+
+                //If on crash data loaded page 
+                if(document.getElementById('crashDataLoaded-content').style.display === 'block'){
+                    previousScreen = 'crashDataLoaded-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientationChange-content').style.display = 'block';
+                }
+
+                //If on crash data not loaded page 
+                if(document.getElementById('crashDataNotLoaded-content').style.display === 'block'){
+                    previousScreen = 'crashDataNotLoaded-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientationChange-content').style.display = 'block';
+                }
+
+                //If on survey page 
+                if(document.getElementById('survey-content').style.display === 'block'){
+                    previousScreen = 'survey-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientationChange-content').style.display = 'block';
+                }
+
+                //If on block1 instructions page 
+                if(document.getElementById('block1_instructions-content').style.display === 'block'){
+                    previousScreen = 'block1_instructions-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientationChange-content').style.display = 'block';
+                }
+
+                //If on block2 instructions page 
+                if(document.getElementById('block2_instructions-content').style.display === 'block'){
+                    previousScreen = 'block2_instructions-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientationChange-content').style.display = 'block';
+                }
+
+                //If on fullscreen prompt page
+                if(document.getElementById('fullscreen-content').style.display === 'block'){
+                    previousScreen = 'fullscreen-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientationChange-content').style.display = 'block';
+                }
+
+                //If on pointerlock prompt page
+                if(document.getElementById('pointerlock-content').style.display === 'block'){
+                    previousScreen = 'pointerlock-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientationChange-content').style.display = 'block';
+                }
+
+                //If currently in trial
+                if(document.getElementById('trial-content').style.display === 'block'){
+                    previousScreen = 'trial-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientationChange-content').style.display = 'block';
+                }
+
+                //If on end early page
+                if(document.getElementById('endEarly-content').style.display === 'block'){
+                    previousScreen = 'endEarly-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientationChange-content').style.display = 'block';
+                }
+
+                //If on end page
+                if(document.getElementById('end-content').style.display === 'block'){
+                    previousScreen = 'end-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientationChange-content').style.display = 'block';
+                }
+
+                //Treat device rotation during the game as a touch release 
+                if(inputdevice == "Touch"){
+                    consoleLog("Device has been rotated from landscape")
+                
+                    //release to reset ball to home position
+                    if (isMember(state.current, [state.START, state.GO, state.MOVING]) && event.which===0 && !trialEnded){ 
+                      resetBall()
+                    }
+                }
+            } else {
+    	        //Landscape
+                correctOrientation = true;
+                consoleLog("Device is in the correct orientation")
+                
+                //If pre-game, set back to default homepage
+                if(preGameStart){
+                    document.getElementById('screenOrientation-content').style.display = 'none';
+                    document.getElementById('homepage-content').style.display = 'block';
+                } else { 
+                    //Go back to previous screen
+                    document.getElementById('screenOrientationChange-content').style.display = 'none';
+                    document.getElementById(previousScreen).style.display = 'block';
+                }
+            }
+        } else if (bowser.parse(window.navigator.userAgent).browser.name === "Chrome"){
+            consoleLog("Enter Chrome orientation check")
+
+            if (window.screen.orientation.type === "portrait-primary" || window.screen.orientation.type === "portrait-secondary"){
+                //Portrait
+                consoleLog("Please rotate your device back to landscape")
+                correctOrientation = false;
+
+                //If pre-Game
+                if(document.getElementById('homepage-content').style.display === 'block'){
+                    previousScreen = 'homepage-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientation-content').style.display = 'block';
+                }
+
+                //If on crash page 
+                if(document.getElementById('crash-content').style.display === 'block'){
+                    previousScreen = 'crash-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientationChange-content').style.display = 'block';
+                }
+
+                //If on crash data loaded page 
+                if(document.getElementById('crashDataLoaded-content').style.display === 'block'){
+                    previousScreen = 'crashDataLoaded-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientationChange-content').style.display = 'block';
+                }
+
+                //If on crash data not loaded page 
+                if(document.getElementById('crashDataNotLoaded-content').style.display === 'block'){
+                    previousScreen = 'crashDataNotLoaded-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientationChange-content').style.display = 'block';
+                }
+
+                //If on survey page 
+                if(document.getElementById('survey-content').style.display === 'block'){
+                    previousScreen = 'survey-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientationChange-content').style.display = 'block';
+                }
+
+                //If on block1 instructions page 
+                if(document.getElementById('block1_instructions-content').style.display === 'block'){
+                    previousScreen = 'block1_instructions-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientationChange-content').style.display = 'block';
+                }
+
+                //If on block2 instructions page 
+                if(document.getElementById('block2_instructions-content').style.display === 'block'){
+                    previousScreen = 'block2_instructions-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientationChange-content').style.display = 'block';
+                }
+
+                //If on fullscreen prompt page
+                if(document.getElementById('fullscreen-content').style.display === 'block'){
+                    previousScreen = 'fullscreen-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientationChange-content').style.display = 'block';
+                }
+
+                //If on pointerlock prompt page
+                if(document.getElementById('pointerlock-content').style.display === 'block'){
+                    previousScreen = 'pointerlock-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientationChange-content').style.display = 'block';
+                }
+
+                //If currently in trial
+                if(document.getElementById('trial-content').style.display === 'block'){
+                    previousScreen = 'trial-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientationChange-content').style.display = 'block';
+                }
+
+                //If on end early page
+                if(document.getElementById('endEarly-content').style.display === 'block'){
+                    previousScreen = 'endEarly-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientationChange-content').style.display = 'block';
+                }
+
+                //If on end page
+                if(document.getElementById('end-content').style.display === 'block'){
+                    previousScreen = 'end-content';
+                    document.getElementById(previousScreen).style.display = 'none';
+                    document.getElementById('screenOrientationChange-content').style.display = 'block';
+                }
+
+                //Treat device rotation during the game as a touch release 
+                if(inputdevice == "Touch"){
+                    consoleLog("Device has been rotated from landscape")
+                
+                    //release to reset ball to home position
+                    if (isMember(state.current, [state.START, state.GO, state.MOVING]) && event.which===0 && !trialEnded){ 
+                      resetBall()
+                    }
+                }
+
+            } else if ( window.screen.orientation.type === "landscape-primary" || window.screen.orientation.type === "landscape-secondary"){
+    	        //Landscape
+                correctOrientation = true;
+                consoleLog("Device is in the correct orientation")
+
+                //If pre-game, set back to default homepage
+                if(preGameStart){
+                    document.getElementById('screenOrientation-content').style.display = 'none';
+                    document.getElementById('homepage-content').style.display = 'block';
+                } else { 
+                    //Go back to previous screen
+                    document.getElementById('screenOrientationChange-content').style.display = 'none';
+                    document.getElementById(previousScreen).style.display = 'block';
+                }
+
+            } else{
+                consoleLog("The orientation API isn't supported in this browser :(")
+            }
+        }
+    }
+
+      //This function sets up the gifs that play after the button is hit
+      function videos(){
+
+        var urls = ["https://media.giphy.com/media/j80foFNSOVrKo/giphy.mp4",
+                    "https://media.giphy.com/media/opqIeAldL5NII/giphy.mp4",
+                    "https://media.giphy.com/media/PivUZ0zExEtGcydc2D/giphy.mp4",
+                    "https://media.giphy.com/media/tSc1a4mxzRB6g/giphy.mp4",
+                    "https://media.giphy.com/media/HVTOrIRuYy8Qo/giphy.mp4",
+                    "https://media.giphy.com/media/UJicODs7ArC9O/giphy.mp4",
+                    "https://media.giphy.com/media/UKsFxyjRxTaP6/giphy.mp4",
+                    "https://media.giphy.com/media/heWR2b0XV2Nvq/giphy.mp4",
+                    "https://media.giphy.com/media/13fp0SNp60Hwk0/giphy.mp4",
+                    "https://media.giphy.com/media/oKXxbD1vjE8Fy/giphy.mp4",
+                    "https://media.giphy.com/media/27lCYLGnQ2RZm/giphy.mp4",
+                    "https://media.giphy.com/media/MG6pAoL7co9Nu/giphy.mp4",
+                    "https://media.giphy.com/media/g25D24g41k3oQ/giphy.mp4",
+                    "https://media.giphy.com/media/3oz8xZf6yStcrtIncI/giphy.mp4",
+                    "https://media.giphy.com/media/4yK3Vl65YhwNa/giphy.mp4",
+                    "https://media.giphy.com/media/qCx88i7ei70cM/giphy.mp4",
+                    "https://media.giphy.com/media/IgLt8tZcGGYXS/giphy.mp4",
+                    "https://media.giphy.com/media/hyTFIrQpwas6c/giphy.mp4",
+                    "https://media.giphy.com/media/Fugjn5yobr0d2/giphy.mp4",
+                    "https://media.giphy.com/media/Ag5MfFfvcHd8k/giphy.mp4",
+                    "https://media.giphy.com/media/xgrbRyyrz4RZS/giphy.mp4",
+                    "https://media.giphy.com/media/RWCaYbypldkwE/giphy.mp4",
+                    "https://media.giphy.com/media/5guYctWhB0FxK/giphy.mp4",
+                    "https://media.giphy.com/media/wIJejHmpXRNj4Px1bD/giphy.mp4",
+                    "https://media.giphy.com/media/ff748OtDfBwuk/giphy.mp4",
+                    "https://media.giphy.com/media/WRWstd09k55eg/giphy.mp4",
+                    "https://media.giphy.com/media/iVPuLpCFbMiM8/giphy.mp4",
+                    "https://media.giphy.com/media/ClSRyYPD364NO/giphy.mp4",
+                    "https://media.giphy.com/media/8A0tsbRCALBDO/giphy.mp4",
+                    "https://media.giphy.com/media/770WN0X9Wq5mE/giphy.mp4",
+                    "https://media.giphy.com/media/3oriNYroyEyMgGGt0Y/giphy.mp4",
+                    "https://media.giphy.com/media/QSLtvOL02ggyA/giphy.mp4",
+                    "https://media.giphy.com/media/Cy5Gl9aiRsYg/giphy.mp4",
+                    "https://media.giphy.com/media/2BA9Kpwm9KxaM/giphy.mp4",
+                    "https://media.giphy.com/media/GFklenxHiTNio/giphy.mp4",
+                    "https://media.giphy.com/media/718O0LEk4xDxK/giphy.mp4",
+                    "https://media.giphy.com/media/BhzQ7bda46OM8/giphy.mp4",
+                    "https://media.giphy.com/media/gNqPZGiwsZs9a/giphy.mp4",
+                    "https://media.giphy.com/media/BbY6OCPOwnunK/giphy.mp4",
+                    "https://media.giphy.com/media/IhOpBpN5DZ3pjEK21O/giphy.mp4",
+                    "https://media.giphy.com/media/NLIywQvuBKQ9y/giphy.mp4",
+                    "https://media.giphy.com/media/DYuoXR2GGKpDW/giphy.mp4",
+                    "https://media.giphy.com/media/Qgeg0wsKtgMjm/giphy.mp4",
+                    "https://media.giphy.com/media/n5YajTggvim3e/giphy.mp4",
+                    "https://media.giphy.com/media/l4KiaigrjUUjbXh16/giphy.mp4",
+                    "https://media.giphy.com/media/4lqhlpZC1oBO0/giphy.mp4",
+                    "https://media.giphy.com/media/kdMm8cWwsqUvK/giphy.mp4",
+                    "https://media.giphy.com/media/FfJOY5DrUfzHy/giphy.mp4",
+                    "https://media.giphy.com/media/l2JhKvjpzqViGyi8U/giphy.mp4",
+                    "https://media.giphy.com/media/vaX1jzA99qLSg/giphy.mp4",
+                    "https://media.giphy.com/media/Fes6DoCruaz7i/giphy.mp4",
+                    "https://media.giphy.com/media/kbiaO7yUik591kqlgj/giphy.mp4",
+                    "https://media.giphy.com/media/EBPYB0yzuLBEQ/giphy.mp4",
+                    "https://media.giphy.com/media/MN4o9qwvVr6W4/giphy.mp4",
+                    "https://media.giphy.com/media/12ZKDG6HAsXra/giphy.mp4",
+                    "https://media.giphy.com/media/kRvk2q1M6iXRK/giphy.mp4",
+                    "https://media.giphy.com/media/oVodxyUvwYotFVMncm/giphy.mp4",
+                    "https://media.giphy.com/media/HlGY78zO1NDuo/giphy.mp4",
+                    "https://media.giphy.com/media/ZbR6iynJKufE4/giphy.mp4",
+                    "https://media.giphy.com/media/QE6Ql9i2RgXao/giphy.mp4",
+                    "https://media.giphy.com/media/Vhicw1BYBfIdi/giphy.mp4",
+                    "https://media.giphy.com/media/DvfTp8qhBbLE3fUAVF/giphy.mp4",
+                    "https://media.giphy.com/media/3aIGjbZ6kWe1q/giphy.mp4",
+                    "https://media.giphy.com/media/sJDRvA5IgBSve/giphy.mp4",
+                    "https://media.giphy.com/media/jIY3KEikFKgrm/giphy.mp4",
+                    "https://media.giphy.com/media/qmkYNFprqZJ96/giphy.mp4",
+                    "https://media.giphy.com/media/2Xx7L2qVND6fe/giphy.mp4",
+                    "https://media.giphy.com/media/elhRcmg7jVTVcVUkto/giphy.mp4",
+                    "https://media.giphy.com/media/JEhCPFfqi2Hy8/giphy.mp4",
+                    "https://media.giphy.com/media/RQFlNURtNPwic/giphy.mp4",
+                    "https://media.giphy.com/media/13kfHhFYIi3viw/giphy.mp4",
+                    "https://media.giphy.com/media/26ufcipfaa4Gh2vjG/giphy.mp4",
+                    "https://media.giphy.com/media/7zAvxywgjpwgU/giphy.mp4",
+                    "https://media.giphy.com/media/OIWGNtLWpWKPK/giphy.mp4",
+                    "https://media.giphy.com/media/W55xrlzLAjHX2/giphy.mp4",
+                    "https://media.giphy.com/media/t5bpgRjxPQYTe/giphy.mp4",
+                    "https://media.giphy.com/media/nV6ZOcHySrHX2/giphy.mp4",
+                    "https://media.giphy.com/media/d31vksaCuYvCSpMI/giphy.mp4",
+                    "https://media.giphy.com/media/W09D2xwt0OwKc/giphy.mp4",
+                    "https://media.giphy.com/media/U8DRoffzW12De/giphy.mp4",
+                    "https://media.giphy.com/media/eNdZS6wyF4u9G/giphy.mp4",
+                    "https://media.giphy.com/media/lMa8QX6qZN08ndWL0e/giphy.mp4",
+                    "https://media.giphy.com/media/1B4Iv2xqfJcGs/giphy.mp4",
+                    "https://media.giphy.com/media/fsawdRIMJPCAOJwsVk/giphy.mp4",
+                    "https://media.giphy.com/media/ZU5Fea9kn3Pl6/giphy.mp4",
+                    "https://media.giphy.com/media/YVFhziweJcFfa/giphy.mp4",
+                    "https://media.giphy.com/media/10VDn6dLpxA9nW/giphy.mp4",
+                    "https://media.giphy.com/media/InQdAicbxUEyQ/giphy.mp4",
+                    "https://media.giphy.com/media/26ufgIv8eSa3qp8J2/giphy.mp4",
+                    "https://media.giphy.com/media/tfrXPmM2b3tC/giphy.mp4",
+                    "https://media.giphy.com/media/aB4IFicT0YhXO/giphy.mp4",
+                    "https://media.giphy.com/media/Q8EuwvkC6Zavu/giphy.mp4",
+                    "https://media.giphy.com/media/3o6ozglbFoo09O0Sli/giphy.mp4",
+                    "https://media.giphy.com/media/biNn8j4VKIzYc/giphy.mp4",
+                    "https://media.giphy.com/media/tGXh4RTQSzpYc/giphy.mp4",
+                    "https://media.giphy.com/media/XW84K7p8gu20E/giphy.mp4",
+                    "https://media.giphy.com/media/eKDfWXoZiYe6Tje9Ea/giphy.mp4",
+                    "https://media.giphy.com/media/XmeNoGkNfRsCQ/giphy.mp4",
+                    "https://media.giphy.com/media/LO3eXdAocudz2/giphy.mp4",
+                    "https://media.giphy.com/media/lP0Iey7rgJHi0/giphy.mp4",
+                    "https://media.giphy.com/media/oAI9FNrw2mSac/giphy.mp4",
+                    "https://media.giphy.com/media/sFFeMtSDVthks/giphy.mp4",
+                    "https://media.giphy.com/media/RaNAnl2DrVbMI/giphy.mp4",
+                    "https://media.giphy.com/media/3o7TKERr1UFmalFZKw/giphy.mp4",
+                    "https://media.giphy.com/media/i7edluGwIuiL6/giphy.mp4",
+                    "https://media.giphy.com/media/nJ2PObJA3EVgc/giphy.mp4",
+                    "https://media.giphy.com/media/11OoTctG5cjn0s/giphy.mp4",
+                    "https://media.giphy.com/media/YnlHIoxpnyFsk/giphy.mp4",
+                    "https://media.giphy.com/media/GpUn4olq6xjP2/giphy.mp4",
+                    "https://media.giphy.com/media/TzoUxq2seGGIw/giphy.mp4",
+                    "https://media.giphy.com/media/NAhEcmzeH7Try/giphy.mp4",
+                    "https://media.giphy.com/media/OEDys4VMQ9QsM/giphy.mp4",
+                    "https://media.giphy.com/media/iayuIQUL4xmCs/giphy.mp4",
+                    "https://media.giphy.com/media/J6U8BNS44T17oCehBz/giphy.mp4",
+                    "https://media.giphy.com/media/9rMvwuIpMBKU0/giphy.mp4",
+                    "https://media.giphy.com/media/rCmC12OWz9kTS/giphy.mp4",
+                    "https://media.giphy.com/media/nCAy4hwMCsEyA/giphy.mp4",
+                    "https://media.giphy.com/media/duJTOfs3PW5Xy/giphy.mp4",
+                    "https://media.giphy.com/media/BEvVsk0v0JM6k/giphy.mp4",
+                    "https://media.giphy.com/media/UYhTZ8SMzLceQ/giphy.mp4",
+                    "https://media.giphy.com/media/s3wA2BVXcFgJ2/giphy.mp4",
+                    "https://media.giphy.com/media/1aZkbDPnR5LYQ/giphy.mp4",
+                    "https://media.giphy.com/media/xcymn33ucu4M0/giphy.mp4",
+                    "https://media.giphy.com/media/5cAqRhdiL4guI/giphy.mp4",
+                    "https://media.giphy.com/media/VrQx2SohkbGHC/giphy.mp4",
+                    "https://media.giphy.com/media/m93LJkUU866ORIhU8O/giphy.mp4",
+                    "https://media.giphy.com/media/iS7BWPRZO0Soo/giphy.mp4",
+                    "https://media.giphy.com/media/4TljvLtcDEkKs/giphy.mp4",
+                    "https://media.giphy.com/media/4HJlIUdZMdGFO/giphy.mp4",
+                    "https://media.giphy.com/media/xT1XGZhiefl2iXKRBS/giphy.mp4",
+                    "https://media.giphy.com/media/xqHZqKYUjcJXO/giphy.mp4",
+                    "https://media.giphy.com/media/jTXvL4LjakYI8/giphy.mp4",
+                    "https://media.giphy.com/media/Hp4lpOT1Ns60o/giphy.mp4",
+                    "https://media.giphy.com/media/6lzn8RlCj3Npm/giphy.mp4",
+                    "https://media.giphy.com/media/2YGTfh3QpayuQ/giphy.mp4",
+                    "https://media.giphy.com/media/QOzuHImmKNX8c/giphy.mp4",
+                    "https://media.giphy.com/media/hRHhWMkbb7mzm/giphy.mp4",
+                    "https://media.giphy.com/media/GBEBuGTqKP3tC/giphy.mp4",
+                    "https://media.giphy.com/media/d8FCVcztjbJfMyvAbh/giphy.mp4",
+                    "https://media.giphy.com/media/QxNFBs38pmSmQ/giphy.mp4",
+                    "https://media.giphy.com/media/Xo8p9phgs742I/giphy.mp4",
+                    "https://media.giphy.com/media/g3AWnQ8Fwcmpq/giphy.mp4",
+                    "https://media.giphy.com/media/QFypAZbq5lz3i/giphy.mp4",
+                    "https://media.giphy.com/media/MHreYunWv5O3S/giphy.mp4",
+                    "https://media.giphy.com/media/mpRYLk0ACWAP6/giphy.mp4",
+                    "https://media.giphy.com/media/WFEZyFxxmZ0Vq/giphy.mp4",
+                    "https://media.giphy.com/media/32s0tpTTTZNOU/giphy.mp4",
+                    "https://media.giphy.com/media/U1keBkXnIeiY0/giphy.mp4",
+                    "https://media.giphy.com/media/Iv5BPnvKRKLZu/giphy.mp4",
+                    "https://media.giphy.com/media/3oD3YMYRPCVrP2a9K8/giphy.mp4",
+                    "https://media.giphy.com/media/4h15cAhLXjuJG/giphy.mp4",
+                    "https://media.giphy.com/media/iYWKG2TGjCepW/giphy.mp4",
+                    "https://media.giphy.com/media/dTWNSIL9is0Tbt3b1Q/giphy.mp4",
+                    "https://media.giphy.com/media/cHG683IB16ZSU/giphy.mp4",
+                    "https://media.giphy.com/media/l0HlVf31a8sTRDWVi/giphy.mp4",
+                    "https://media.giphy.com/media/l0MYrhvf7Y2FRqpnG/giphy.mp4",
+                    "https://media.giphy.com/media/xUPGcmrcibFp4dpwhq/giphy.mp4",
+                    "https://media.giphy.com/media/3o7qE2fPuzqQWbu7Ti/giphy.mp4",
+                    "https://media.giphy.com/media/d2YWo2bU0OErxrTq/giphy.mp4",
+                    "https://media.giphy.com/media/dBOVK7ZLDicUVZeguo/giphy.mp4",
+                    "https://media.giphy.com/media/Sr94eSI8C15Aq3XApQ/giphy.mp4",
+                    "https://media.giphy.com/media/CJywPvSt4JE0E/giphy.mp4",
+                    "https://media.giphy.com/media/l2SpUEcP2G3VAgBW0/giphy.mp4",
+                    "https://media.giphy.com/media/3o7qDRiijR9ytzjHP2/giphy.mp4",
+                    "https://media.giphy.com/media/3o7qEaBjKQAH4LCRxK/giphy.mp4",
+                    "https://media.giphy.com/media/c9hhguaMSNj9K/giphy.mp4",
+                    "https://media.giphy.com/media/sB3lGlcNfNu36/giphy.mp4",
+                    "https://media.giphy.com/media/oh1N3YDant3Ne/giphy.mp4",
+                    "https://media.giphy.com/media/Yl4hiDaOc80rS/giphy.mp4",
+                    "https://media.giphy.com/media/xUPGclaTT7knw1O9LW/giphy.mp4",
+                    "https://media.giphy.com/media/Jf9mTOiFs9vzO/giphy.mp4",
+                    "https://media.giphy.com/media/LCjdJP9o3r6jS/giphy.mp4",
+                    "https://media.giphy.com/media/Tg0DAW8EJW8IU/giphy.mp4",
+                    "https://media.giphy.com/media/nGZSSlzkWYAwM/giphy.mp4",
+                    "https://media.giphy.com/media/ilISpQ490SiHu/giphy.mp4",
+                    "https://media.giphy.com/media/N7D0SiP96OptC/giphy.mp4",
+                    "https://media.giphy.com/media/PJuWsfOXWOpZC/giphy.mp4",
+                    "https://media.giphy.com/media/10OssZksriH2r6/giphy.mp4",
+                    "https://media.giphy.com/media/vf6OAgJtEI10Y/giphy.mp4",
+                    "https://media.giphy.com/media/Or7jwLWwOY6vC/giphy.mp4",
+                    "https://media.giphy.com/media/pHpO6rnxsVyP6/giphy.mp4",
+                    "https://media.giphy.com/media/Jisl24Dwj8pNe/giphy.mp4",
+                    "https://media.giphy.com/media/XQEGoW9NLVVQY/giphy.mp4",
+                    "https://media.giphy.com/media/ovzkPPq1TPsR2/giphy.mp4",
+                    "https://media.giphy.com/media/HpxMprlVHr2De/giphy.mp4",
+                    "https://media.giphy.com/media/lpsygefxbnrkA/giphy.mp4",
+                    "https://media.giphy.com/media/EnbIg1elWrClG/giphy.mp4",
+                    "https://media.giphy.com/media/uym9sd5fTTaOA/giphy.mp4",
+                    "https://media.giphy.com/media/hG4PIXqLEQ0VO/giphy.mp4",
+                    "https://media.giphy.com/media/oFRj8XTNwG8Bq/giphy.mp4",
+                    "https://media.giphy.com/media/wNDa1OZtvl6Fi/giphy.mp4",
+                    "https://media.giphy.com/media/CfM5LZjbIRrj2/giphy.mp4",
+                    "https://media.giphy.com/media/WT16t1bCbJCQ8/giphy.mp4",
+                    "https://media.giphy.com/media/84ZzhsJZWlE3e/giphy.mp4",
+                    "https://media.giphy.com/media/KAcuYHOBjG6DS/giphy.mp4",
+                    "https://media.giphy.com/media/j90b2D9XoF1qo/giphy.mp4",
+                    "https://media.giphy.com/media/58uV58zBKbTLq/giphy.mp4",
+                    "https://media.giphy.com/media/1E6Fxt79yoZmU/giphy.mp4",
+                    "https://media.giphy.com/media/103LfjRxTvCZCU/giphy.mp4"];
+
+        return urls;
+    }
+
+    </script>
+  </body>
+
+</html>
